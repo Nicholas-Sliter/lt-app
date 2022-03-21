@@ -13,6 +13,6 @@ export default function useExample(param_that_causes_recalculation: string){
   }, [param_that_causes_recalculation]);
 
 
-  return example;
+    return example;
 
 }
