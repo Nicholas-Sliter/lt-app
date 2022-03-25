@@ -1,8 +1,2 @@
-
-export const languages = [
-  "french",
-  "english",
-  "german",
-  "spanish",
-
-];
+const languages = ["french", "english", "german", "spanish"];
+module.exports = { languages };

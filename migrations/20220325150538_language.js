@@ -1,6 +1,5 @@
-import { Knex } from "knex";
-
-export async function up(knex: Knex): Promise<void> {
+/////MUST ME .MJS FILE EXTENSION!!
+exports.up = function (knex, Promise) {
   return knex.schema
     .createTable("languages", (table) => {
       table.string("name").primary();
@@ -21,8 +20,8 @@ export async function up(knex: Knex): Promise<void> {
       table.boolean("daily_reports").defaultTo(false).notNullable();
       table.boolean("weekly_reports").defaultTo(false).notNullable();
     });
-}
+};
 
-export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable("languages").dropTable("courses");
-}
+exports.down = function (knex, Promise) {
+  return knex.schema.dropTable("languages");
+};
