@@ -1,14 +1,21 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { Result } from "antd";
+import { responsiveArray } from "antd/lib/_util/responsiveObserve";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDateInfo } from "../../../src/lib/backend/database-utils";
 type Data = {
   name: string;
 };
 
-getDateInfo();
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: "John Doe" });
-}
+const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  try {
+    const data = await getDateInfo();
+    console.log(data);
+    res.status(200).end(JSON.stringify(data));
+  } catch (e) {
+    console.log(e);
+    res.status(500).end("Something went wrong");
+  }
+};
+
+export default handler;
