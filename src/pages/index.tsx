@@ -9,10 +9,23 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { languages } from "../../data/expConst";
 import Select from "react-select";
+
 const Home: NextPage = () => {
+  //define our states so we can access the data the user types
   const [value, onChange] = useState(new Date());
   const [language, onChangeLang] = useState();
+  var [firstnameINPUT, onFirstnameCHANGE] = useState("");
+  var [lastnameINPUT, onLastnameCHANGE] = useState("");
+
+  //handler for submitting the form
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    alert(
+      `Submitting Name ${firstnameINPUT.toString()} ${lastnameINPUT.toString()}`
+    );
+  };
   const defaultOption = languages[0];
+
   return (
     <div className={styles.container}>
       <Head>
@@ -38,6 +51,26 @@ const Home: NextPage = () => {
           {value.toString().slice(0, 10)} for{" "}
           {language ? language.label : "NONE"}
         </div>
+        {/* Adding Getting Personel Data */}
+        <form onSubmit={handleSubmit}>
+          <label>
+            First Name:
+            <input
+              type="text"
+              value={firstnameINPUT}
+              onChange={(e) => onFirstnameCHANGE(e.target.value)}
+            />
+          </label>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              value={lastnameINPUT}
+              onChange={(e) => onLastnameCHANGE(e.target.value)}
+            />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
       </div>
     </div>
   );
