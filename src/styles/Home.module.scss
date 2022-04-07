@@ -1,0 +1,49 @@
+.titleClass {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.calenderClass {
+  font-size: 30px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.selectLang_and_Course {
+  margin-top: 30px;
+  height: 50px;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.selectLang_and_Course {
+  span {
+    display: table-cell;
+    line-height: 20px;
+    vertical-align: middle;
+    padding: 5px;
+  }
+}
+
+.form {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+.form label {
+  margin: 10px;
+}
+.chooseCourse {
+  size: 20px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submitButton {
+  width: 100px;
+}

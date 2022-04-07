@@ -10,7 +10,7 @@ import { languages, courses } from "../../data/expConst";
 import Select from "react-select";
 import styles from "../styles/Home.module.scss";
 
-function Home() {
+function Home()
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
   const [language, onChangeLang] = useState("");
