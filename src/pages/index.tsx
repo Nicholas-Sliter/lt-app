@@ -1,27 +1,28 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/Home.module.scss";
 import TestComponent from "../components/TestComponent";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { languages } from "../../data/expConst";
+import { languages, courses } from "../../data/expConst";
 import Select from "react-select";
+import styles from "../styles/Home.module.scss";
 
-const Home: NextPage = () => {
+function Home() {
   //define our states so we can access the data the user types
-  const [value, onChange] = useState(new Date());
-  const [language, onChangeLang] = useState();
-  var [firstnameINPUT, onFirstnameCHANGE] = useState("");
-  var [lastnameINPUT, onLastnameCHANGE] = useState("");
+  const [dateValue, onDateChange] = useState(new Date());
+  const [language, onChangeLang] = useState("");
+  const [course, changeCourse] = useState("N/A");
+  const [firstnameINPUT, onFirstnameCHANGE] = useState("");
+  const [lastnameINPUT, onLastnameCHANGE] = useState("");
 
   //handler for submitting the form
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    alert(
-      `Submitting Name ${firstnameINPUT.toString()} ${lastnameINPUT.toString()}`
+    console.log(
+      `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
     );
   };
   const defaultOption = languages[0];
@@ -34,9 +35,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
+        <div>
+          Testing our component: <TestComponent />
+        </div>
         <div className={styles.titleClass}>Middlebury Language Tables</div>
-        <div className={styles.selectLangClass}>
-          <span>Language:</span>{" "}
+        <div className={styles.selectLang_and_Course}>
+          <span>Language:</span> Name:
           <span>
             {" "}
             <Select options={languages} onChange={onChangeLang} />{" "}
@@ -44,15 +48,15 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.calenderClass}>
           {" "}
-          <Calendar onChange={onChange} value={value} />
+          <Calendar onChange={onDateChange} value={dateValue} />
         </div>
         <div className={styles.titleClass}>
           {" "}
-          {value.toString().slice(0, 10)} for{" "}
+          {dateValue.toString().slice(0, 10)} for{" "}
           {language ? language.label : "NONE"}
         </div>
         {/* Adding Getting Personel Data */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <label>
             First Name:
             <input
@@ -69,11 +73,29 @@ const Home: NextPage = () => {
               onChange={(e) => onLastnameCHANGE(e.target.value)}
             />
           </label>
-          <input type="submit" value="Submit" />
+
+          <label>
+            <span>Select Course:</span>
+            <span>
+              {" "}
+              <Select
+                options={courses}
+                onChange={changeCourse}
+                className={styles.chooseCourse}
+              />{" "}
+            </span>
+          </label>
+          <label>
+            <input
+              type="submit"
+              value="Submit"
+              className={styles.submitButton}
+            />
+          </label>
         </form>
       </div>
     </div>
   );
-};
+}
 
 export default Home;

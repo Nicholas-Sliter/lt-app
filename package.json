@@ -12,11 +12,9 @@
   "dependencies": {
     "@vscode/sqlite3": "^5.0.7",
     "add": "^2.0.6",
-    "axios": "^0.26.1",
-    "install": "^0.13.0",
     "knex": "^1.0.4",
     "next": "12.1.0",
-    "npm": "^8.5.5",
+    "next-connect": "^0.12.2",
     "react": "17.0.2",
     "react-calendar": "^3.7.0",
     "react-dater": "^1.6.0",
