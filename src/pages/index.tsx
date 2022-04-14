@@ -9,6 +9,7 @@ import { useState } from "react";
 import { languages, courses } from "../../data/expConst";
 import Select from "react-select";
 import styles from "../styles/Home.module.scss";
+import { makeRes } from "../lib/backend/database-utils";
 
 function Home() {
   //define our states so we can access the data the user types
@@ -21,10 +22,37 @@ function Home() {
   //handler for submitting the form
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    submitRes();
     console.log(
       `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
     );
   };
+
+  //to submit a book into the database
+  const submitRes = async () => {
+    const response = await fetch("/api/makeRes", {
+      method: "POST",
+      body: JSON.stringify({
+        firstName: firstnameINPUT,
+        lastName: lastnameINPUT,
+        email: "dummy email",
+        language: "language",
+        course: "dummy course",
+        middID: 1111,
+        resDate: dateValue,
+        type: "student",
+        is_cancelled: false,
+        on_waitlist: false,
+        attended: false,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
   const defaultOption = languages[0];
 
   return (
