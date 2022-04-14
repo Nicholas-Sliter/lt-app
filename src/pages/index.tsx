@@ -37,7 +37,7 @@ function Home() {
       <div>
         <div className={styles.titleClass}>Middlebury Language Tables</div>
         <div className={styles.selectLang_and_Course}>
-          <span>Language:</span> Name:
+          <span>Language:</span>
           <span>
             {" "}
             <Select options={languages} onChange={onChangeLang} />{" "}
