@@ -36,9 +36,6 @@ function Home()
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <div>
-          Testing our component: <TestComponent />
-        </div>
         <div className={styles.titleClass}>Middlebury Language Tables</div>
         <div className={styles.selectLang_and_Course}>
           <span>Language:</span> Name:
