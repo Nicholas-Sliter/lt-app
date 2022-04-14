@@ -75,7 +75,7 @@ function Home() {
           </label>
 
           <label>
-            <span>Select Course:</span>
+            <span>Course Selection:</span>
             <span>
               {" "}
               <Select
