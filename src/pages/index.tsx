@@ -18,6 +18,8 @@ function Home() {
   const [course, changeCourse] = useState("N/A");
   const [firstnameINPUT, onFirstnameCHANGE] = useState("");
   const [lastnameINPUT, onLastnameCHANGE] = useState("");
+  const [emailINPUT, onEmailCHANGE] = useState("");
+  const [idINPUT, onIdChange] = useState("");
 
   //handler for submitting the form
   const handleSubmit = (evt) => {
@@ -35,10 +37,10 @@ function Home() {
       body: JSON.stringify({
         firstName: firstnameINPUT,
         lastName: lastnameINPUT,
-        email: "dummy email",
-        language: "language",
+        email: emailINPUT,
+        language: "spanish",
         course: "dummy course",
-        middID: 1111,
+        middID: parseInt(idINPUT),
         resDate: dateValue,
         type: "student",
         is_cancelled: false,
@@ -98,7 +100,22 @@ function Home() {
               onChange={(e) => onLastnameCHANGE(e.target.value)}
             />
           </label>
-
+          <label>
+            Email:
+            <input
+              type="text"
+              value={emailINPUT}
+              onChange={(e) => onEmailCHANGE(e.target.value)}
+            />
+          </label>
+          <label>
+            Middlebury ID:
+            <input
+              type="text"
+              value={idINPUT}
+              onChange={(e) => onIdChange(e.target.value)}
+            />
+          </label>
           <label>
             <span>Course Selection:</span>
             <span>
