@@ -11,6 +11,7 @@ import Select from "react-select";
 import styles from "../styles/Home.module.scss";
 import { makeRes } from "../lib/backend/database-utils";
 
+var availableCourses = JSON.parse(courses);
 function Home() {
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
@@ -121,7 +122,9 @@ function Home() {
             <span>
               {" "}
               <Select
-                options={courses}
+                options={availableCourses.filter(
+                  (element) => element.departmentID == language.value
+                )}
                 onChange={changeCourse}
                 className={styles.chooseCourse}
               />{" "}
