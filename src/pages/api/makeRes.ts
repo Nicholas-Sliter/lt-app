@@ -34,6 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       on_waitlist,
       attended
     );
+    res.status(200).json({ name: "success" });
   } else {
   }
 };

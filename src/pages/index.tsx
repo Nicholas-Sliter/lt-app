@@ -39,8 +39,8 @@ function Home() {
         firstName: firstnameINPUT,
         lastName: lastnameINPUT,
         email: emailINPUT,
-        language: "spanish",
-        course: "dummy course",
+        language: "french",
+        course: course,
         middID: parseInt(idINPUT),
         resDate: dateValue,
         type: "student",
@@ -76,47 +76,66 @@ function Home() {
         </div>
         <div className={styles.calenderClass}>
           {" "}
-          <Calendar onChange={onDateChange} value={dateValue} />
+          <Calendar
+            className={styles.calenderStyles}
+            onChange={onDateChange}
+            value={dateValue}
+          />
         </div>
         <div className={styles.titleClass}>
           {" "}
-          {dateValue.toString().slice(0, 10)} for{" "}
-          {language ? language.label : "NONE"}
+          {language
+            ? `${dateValue.toString().slice(0, 10)} for ${language.label}`
+            : "Please Select Language"}
         </div>
         {/* Adding Getting Personel Data */}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <label>
-            First Name:
-            <input
-              type="text"
-              value={firstnameINPUT}
-              onChange={(e) => onFirstnameCHANGE(e.target.value)}
-            />
-          </label>
-          <label>
-            Last Name:
-            <input
-              type="text"
-              value={lastnameINPUT}
-              onChange={(e) => onLastnameCHANGE(e.target.value)}
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="text"
-              value={emailINPUT}
-              onChange={(e) => onEmailCHANGE(e.target.value)}
-            />
-          </label>
-          <label>
-            Middlebury ID:
-            <input
-              type="text"
-              value={idINPUT}
-              onChange={(e) => onIdChange(e.target.value)}
-            />
-          </label>
+          <ul className={styles.USERINPUTS}>
+            <li>
+              <label>
+                First Name:
+                <input
+                  type="text"
+                  value={firstnameINPUT}
+                  onChange={(e) => onFirstnameCHANGE(e.target.value)}
+                />
+              </label>
+            </li>
+
+            <li>
+              <label>
+                Last Name:
+                <input
+                  type="text"
+                  value={lastnameINPUT}
+                  onChange={(e) => onLastnameCHANGE(e.target.value)}
+                />
+              </label>
+            </li>
+          </ul>
+          <ul className={styles.USERINPUTS}>
+            <li>
+              <label>
+                Email:
+                <input
+                  type="text"
+                  value={emailINPUT}
+                  onChange={(e) => onEmailCHANGE(e.target.value)}
+                />
+              </label>
+            </li>
+            <li>
+              <label>
+                Middlebury ID:
+                <input
+                  type="text"
+                  value={idINPUT}
+                  onChange={(e) => onIdChange(e.target.value)}
+                />
+              </label>
+            </li>
+          </ul>
+
           <label>
             <span>Course Selection:</span>
             <span>
