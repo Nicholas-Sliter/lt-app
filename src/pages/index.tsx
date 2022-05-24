@@ -93,7 +93,7 @@ function Home() {
             <Select
               options={languages}
               onChange={onChangeLang}
-              defaultInputValue={languages[0].label}
+              //  defaultInputValue={languages[0].label}
             />{" "}
           </span>
         </div>
