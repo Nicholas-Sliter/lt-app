@@ -16,8 +16,8 @@ const params = [""];
  * @returns A promise that resolves to the review or null if it doesn't exist.
  *
  */
-export async function getDateInfo(): Promise<any> {
-  const review = await knex("languages").where({ name: "Spanish" });
+export async function getDateInfo(datePassed): Promise<any> {
+  const review = await knex("reservations").where({ date: datePassed });
 
   if (!review) {
     return null;

@@ -14,10 +14,11 @@ import { makeRes } from "../lib/backend/database-utils";
 function Home() {
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
-  const [language, onChangeLang] = useState("");
+  const [language, onChangeLang] = useState(languages[0]);
   const [course, changeCourse] = useState("N/A");
   const [firstnameINPUT, onFirstnameCHANGE] = useState("");
   const [lastnameINPUT, onLastnameCHANGE] = useState("");
+  const [availabilitiy, setavailabilitiy] = useState("available");
 
   //handler for submitting the form
   const handleSubmit = (evt) => {
@@ -36,7 +37,7 @@ function Home() {
         firstName: firstnameINPUT,
         lastName: lastnameINPUT,
         email: "dummy email",
-        language: "language",
+        language: language,
         course: "dummy course",
         middID: 1111,
         resDate: dateValue,
@@ -51,6 +52,19 @@ function Home() {
     });
     const data = await response.json();
     console.log(data);
+  };
+
+  const getAvailability = async () => {
+    const response = await fetch("/api/checkAvail", {
+      method: "POST",
+      body: JSON.stringify({
+        date: dateValue,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json().then((retuend) => console.log(retuend));
   };
 
   const defaultOption = languages[0];
@@ -68,12 +82,17 @@ function Home() {
           <span>Language:</span>
           <span>
             {" "}
-            <Select options={languages} onChange={onChangeLang} />{" "}
+            <Select
+              options={languages}
+              onChange={onChangeLang}
+              defaultInputValue={languages[0].label}
+            />{" "}
           </span>
         </div>
         <div className={styles.calenderClass}>
           {" "}
           <Calendar onChange={onDateChange} value={dateValue} />
+          <button onClick={getAvailability}> </button>
         </div>
         <div className={styles.titleClass}>
           {" "}
