@@ -1,2 +1,2 @@
-module.exports = { colorCode };
-const languages = ["french", "english", "german", "spanish"];
+const languages = ["French", "English", "German", "Spanish"];
+module.exports = { languages };

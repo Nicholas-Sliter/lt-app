@@ -12,12 +12,15 @@ export const knex = knexInitializer(
 const params = [""];
 /**
  * A function that gets informaiton about a date
- * @param reviewId The id of the review to get.
- * @returns A promise that resolves to the review or null if it doesn't exist.
+ * @param datePassed The date of the reservations to get.
+ * @returns the table of reservations.
  *
  */
-export async function getDateInfo(datePassed): Promise<any> {
-  const review = await knex("reservations").where({ date: datePassed });
+export async function getDateInfo(datePassed, languagePassed): Promise<any> {
+  const review = await knex("reservations").where({
+    date: datePassed,
+    language: languagePassed,
+  });
 
   if (!review) {
     return null;
@@ -62,4 +65,19 @@ export async function makeRes(
     return null;
   }
   return review;
+}
+
+/**
+ * A function that gets informaiton about a date
+ * @param passedLanguage The language info to get
+ * @returns the language info
+ *
+ */
+export async function getLanguageInfo(passedLanguage): Promise<any> {
+  const languagetable = await knex("languages").where({ name: passedLanguage });
+
+  if (!languagetable) {
+    return null;
+  }
+  return languagetable;
 }

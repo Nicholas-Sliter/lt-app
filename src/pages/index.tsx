@@ -14,11 +14,11 @@ import { makeRes } from "../lib/backend/database-utils";
 function Home() {
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
-  const [language, onChangeLang] = useState(languages[0]);
+  const [language, onChangeLang] = useState(languages[0].label);
   const [course, changeCourse] = useState("N/A");
   const [firstnameINPUT, onFirstnameCHANGE] = useState("");
   const [lastnameINPUT, onLastnameCHANGE] = useState("");
-  const [availabilitiy, setavailabilitiy] = useState("available");
+  const [availabilitiy, setavailabilitiy] = useState("");
 
   //handler for submitting the form
   const handleSubmit = (evt) => {
@@ -37,8 +37,8 @@ function Home() {
         firstName: firstnameINPUT,
         lastName: lastnameINPUT,
         email: "dummy email",
-        language: language,
-        course: "dummy course",
+        language: language.label,
+        course: course,
         middID: 1111,
         resDate: dateValue,
         type: "student",
@@ -54,21 +54,29 @@ function Home() {
     console.log(data);
   };
 
+  //function that checks the availability of the chosen date
   const getAvailability = async () => {
     const response = await fetch("/api/checkAvail", {
       method: "POST",
       body: JSON.stringify({
         date: dateValue,
+        language: language.label,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json().then((retuend) => console.log(retuend));
+    const data = await response.json().then((retuend) => {
+      console.log(retuend);
+      setavailabilitiy(retuend.data);
+    });
   };
 
   const defaultOption = languages[0];
 
+  useEffect(() => {
+    getAvailability();
+  }, [language, dateValue]);
   return (
     <div className={styles.container}>
       <Head>
@@ -92,7 +100,14 @@ function Home() {
         <div className={styles.calenderClass}>
           {" "}
           <Calendar onChange={onDateChange} value={dateValue} />
-          <button onClick={getAvailability}> </button>
+        </div>
+        <div className={styles.availability}>
+          <button onClick={getAvailability}> Check Availability</button>
+          <br></br>
+          <div>
+            {" "}
+            Available seats: {availabilitiy ? availabilitiy : availabilitiy}
+          </div>
         </div>
         <div className={styles.titleClass}>
           {" "}

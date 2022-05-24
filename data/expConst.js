@@ -1,8 +1,8 @@
 export const languages = [
-  { label: "french" },
-  { label: "english" },
-  { label: "german" },
-  { label: "spanish" },
+  { label: "French" },
+  { label: "English" },
+  { label: "German" },
+  { label: "Spanish" },
 ];
 
 export const courses = [
