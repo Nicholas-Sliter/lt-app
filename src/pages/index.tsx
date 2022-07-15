@@ -21,6 +21,7 @@ import "react";
 function Home() {
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
+  const [studentEmail, setStudentEmail] = useState("");
   const [language, onChangeLang] = useState(languages[0].label);
   const [studentID, setStudentID] = useState("");
   const [course, changeCourse] = useState("N/A");
@@ -56,10 +57,10 @@ function Home() {
       body: JSON.stringify({
         firstName: firstnameINPUT,
         lastName: lastnameINPUT,
-        email: "dummy email",
+        email: studentEmail,
         language: language.label,
         course: course,
-        middID: 1111,
+        middID: studentID,
         resDate: dateValue,
         type: "student",
         is_cancelled: false,
@@ -171,7 +172,18 @@ function Home() {
                     </div>
                   </div>
                   <div className={styles.idRow}>
-                    <div className={styles.nameText}>studentID:</div>
+                    <div className={styles.nameText}>Student email:</div>
+                    <div>
+                      <input
+                        placeholder="...@middlebury.edu"
+                        type="text"
+                        value={studentEmail}
+                        onChange={(e) => setStudentEmail(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.idRow}>
+                    <div className={styles.nameText}>StudentID:</div>
                     <div>
                       <input
                         placeholder="00......"
