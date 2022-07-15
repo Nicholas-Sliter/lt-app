@@ -1,15 +1,41 @@
-.titleClass {
+.headerClass {
   font-size: 30px;
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  background-color: white;
+  color: black;
+  width: 100vw;
+  margin: 20px 0 10px 0;
+  position: absolute;
+  left: 0px;
+  height: 60px;
+}
+.titleClass {
+  padding: 10px;
+  border-bottom: 3px solid black;
 }
 
 .calenderClass {
   font-size: 30px;
-  margin-top: 30px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.calenderClass div > div > div > div > div {
+  background-color: white;
+}
+
+.calenderClass div > div > div > div > div > button {
+  // background-color: white;
+  font-size: 25px;
+}
+.calenderClass div > div > div > div > div > div > div {
+  //background-color: red;
+  font-size: 15px;
 }
 
 .selectLang_and_Course {
@@ -37,6 +63,9 @@
 .form label {
   margin: 10px;
 }
+.form label input {
+  margin: 10px;
+}
 .chooseCourse {
   size: 20px;
   width: 300px;
@@ -49,10 +78,40 @@
 }
 
 .availability {
-  width: 200px;
+  border: 1px solid black;
+  width: 400px;
   display: flex;
+  align-items: baseline;
   justify-content: center;
   margin: 10px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.availability > div {
+  padding: 10px;
+}
+
+.container {
+  background-color: black;
+  height: 100vh;
+}
+
+.dateTitleClass {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  color: black;
+}
+.secondCol {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.row {
+  padding: 10px;
+  justify-content: center;
+}
+
+.row {
 }
