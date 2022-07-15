@@ -10,6 +10,7 @@ import {
 
 //this function will check the availability
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("in api with ", req.body);
   if (req.method == "POST") {
     //first get the information for the requested date and language to see number of seats taken already
     var data = getDateInfo(req.body.date, req.body.language).then(

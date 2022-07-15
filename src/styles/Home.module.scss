@@ -108,10 +108,59 @@
   border-radius: 10px;
 }
 
+.languageRow {
+  padding: 5px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+.languageRow > div {
+  padding: 10px;
+}
+
 .row {
   padding: 10px;
   justify-content: center;
 }
 
-.row {
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+.nameText {
+  padding: 10px;
+}
+
+.Avail {
+  color: green;
+  padding: 5px;
+  margin: 5px;
+  border: 3px solid green;
+}
+
+.notAvail {
+  color: red;
+  padding: 5px;
+  margin: 5px;
+  border: 3px solid red;
+}
+
+.nameInput {
+  width: 100px;
+}
+
+.idRow {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.submittionArea div {
+  display: inline;
+  padding: 5px;
+}
+
+.submittionArea {
+  padding: 20px;
 }

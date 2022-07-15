@@ -22,7 +22,7 @@ function Home() {
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
   const [language, onChangeLang] = useState(languages[0].label);
-  const [studentID, setStudentID] = useState(0);
+  const [studentID, setStudentID] = useState("");
   const [course, changeCourse] = useState("N/A");
   const [firstnameINPUT, onFirstnameCHANGE] = useState("");
   const [lastnameINPUT, onLastnameCHANGE] = useState("");
@@ -76,6 +76,7 @@ function Home() {
 
   //function that checks the availability of the chosen date
   const getAvailability = async () => {
+    console.log(language, dateValue);
     const response = await fetch("/api/checkAvail", {
       method: "POST",
       body: JSON.stringify({
@@ -135,66 +136,51 @@ function Home() {
                     </div>
                   </Col>
                 </Row>
-                <Row className={styles.row}>
-                  <Col></Col>
-                  <Col>
-                    <span>Language:</span>
-                  </Col>
-                  <Col>
+                <div className={styles.languageRow}>
+                  <div>Language:</div>
+                  <div>
                     {" "}
                     <span>
                       <Select options={languages} onChange={onChangeLang} />
                     </span>
-                  </Col>
-                  <Col></Col>
-                </Row>
+                  </div>
+                </div>
 
-                <Row className={styles.rowo}>
-                  <Col></Col>
-                  <Col>
-                    <button onClick={getAvailability}>
-                      {" "}
-                      Check Availability
-                    </button>
-                  </Col>
-                  <Col>
-                    <div>
-                      Available seats:{" "}
-                      {availabilitiy ? availabilitiy : availabilitiy}
-                    </div>
-                  </Col>
-                  <Col></Col>
-                </Row>
                 {/* Adding Getting Personel Data */}
                 <form onSubmit={handleSubmit} className={styles.form}>
-                  <Row className={styles.row}>
-                    <Col md={2}>Name:</Col>
-                    <Col md={4}>
+                  <div className={styles.nameRow}>
+                    <div className={styles.nameText}>Name: {"   "}</div>
+                    <div>
                       <input
+                        placeholder="First..."
+                        className={styles.nameInput}
                         type="text"
                         value={firstnameINPUT}
                         onChange={(e) => onFirstnameCHANGE(e.target.value)}
                       />
-                    </Col>
-                    <Col md={4}>
+                    </div>
+                    <div>
                       {" "}
                       <input
+                        placeholder="Last..."
+                        className={styles.nameInput}
                         type="text"
                         value={lastnameINPUT}
                         onChange={(e) => onLastnameCHANGE(e.target.value)}
                       />
-                    </Col>
-                  </Row>
-                  <Row className={styles.row}>
-                    <Col md={2}>studentID:</Col>
-                    <Col md={2}>
+                    </div>
+                  </div>
+                  <div className={styles.idRow}>
+                    <div className={styles.nameText}>studentID:</div>
+                    <div>
                       <input
+                        placeholder="00......"
                         type="text"
                         value={studentID}
-                        onChange={(e) => setStudentID(parseInt(e.target.value))}
+                        onChange={(e) => setStudentID(e.target.value)}
                       />
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                   <Row className={styles.row}>
                     <Col>
                       <span>Course Selection:</span>
@@ -210,14 +196,25 @@ function Home() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col>
-                      <input
-                        type="submit"
-                        value="Submit"
-                        onSubmit={handleSubmit}
-                        className={styles.submitButton}
-                      />
-                    </Col>
+                    <div className={styles.submittionArea}>
+                      <div>
+                        <input
+                          type="submit"
+                          value="Submit"
+                          onSubmit={handleSubmit}
+                          className={styles.submitButton}
+                        />
+                      </div>
+                      <div
+                        className={
+                          parseInt(availabilitiy) == 0
+                            ? styles.notAvail
+                            : styles.Avail
+                        }
+                      >
+                        Available
+                      </div>
+                    </div>
                   </Row>
                 </form>
               </div>
