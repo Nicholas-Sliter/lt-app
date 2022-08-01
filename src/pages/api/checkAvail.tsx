@@ -18,14 +18,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         console.log("passed", req.body.date, req.body.language);
         //get the max available number of seats possible for a given language
         getLanguageInfo(req.body.language).then((languageRes) => {
+          console.log("getLanguageInfo api call returns, ", languageRes);
           if (languageRes != undefined) {
             var max_seats =
               languageRes[0].tablesOf8 * 8 +
               languageRes[0].tablesOf6 * 6 -
               languageRes[0].reserved_seats;
-            console.log(max_seats);
+            console.log("max seats for this language", max_seats);
             var takenSeats = returned.length;
-            console.log("len", takenSeats);
+            console.log("taken seats:", takenSeats);
             var availible = max_seats - takenSeats;
             res.status(200).json({ data: availible });
           } else {

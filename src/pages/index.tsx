@@ -1,104 +1,28 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import TestComponent from "../components/TestComponent";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { languages, courses } from "../../data/expConst";
+import { languages, courses } from "./../../data/expConst";
 import Select from "react-select";
-import styles from "../styles/Home.module.scss";
-import { makeRes } from "../lib/backend/database-utils";
+import styles from "./../styles/Home.module.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Swal from "sweetalert2";
+import MakeReservation from "./components/MakeReservation";
+import CancelReservation from "./components/CancelReservation";
 
 import "react";
 
 function Home() {
   //define our states so we can access the data the user types
   const [dateValue, onDateChange] = useState(new Date());
-  const [studentEmail, setStudentEmail] = useState("");
-  const [language, onChangeLang] = useState(languages[0].label);
-  const [studentID, setStudentID] = useState("");
-  const [course, changeCourse] = useState("N/A");
-  const [firstnameINPUT, onFirstnameCHANGE] = useState("");
-  const [lastnameINPUT, onLastnameCHANGE] = useState("");
-  const [availabilitiy, setavailabilitiy] = useState("");
+  const [option, setOption] = useState("make");
 
-  //handler for submitting the form
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    submitRes();
-    // alert(
-    //   `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
-    // );
-
-    Swal.fire({
-      title: "Thank you for your submittion!",
-      text: `You have registered for ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.label.toString()}`,
-      // This app is intended to be used as a platform to calculate "who pays who what". This app was inspired by watching family members struggle to calculate the amount of $ owed after family vacations.
-      showClass: {
-        popup: "animate__animated animate__fadeInDown",
-      },
-      hideClass: {
-        popup: "animate__animated animate__fadeOutUp",
-      },
-    });
-  };
-
-  //to submit a book into the database
-  const submitRes = async () => {
-    const response = await fetch("/api/makeRes", {
-      method: "POST",
-      body: JSON.stringify({
-        firstName: firstnameINPUT,
-        lastName: lastnameINPUT,
-        email: studentEmail,
-        language: language.label,
-        course: course,
-        middID: studentID,
-        resDate: dateValue,
-        type: "student",
-        is_cancelled: false,
-        on_waitlist: false,
-        attended: false,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    console.log(data);
-  };
-
-  //function that checks the availability of the chosen date
-  const getAvailability = async () => {
-    console.log(language, dateValue);
-    const response = await fetch("/api/checkAvail", {
-      method: "POST",
-      body: JSON.stringify({
-        date: dateValue,
-        language: language.label,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json().then((retuend) => {
-      console.log(retuend);
-      setavailabilitiy(retuend.data);
-    });
-  };
-
-  const defaultOption = languages[0];
-
-  useEffect(() => {
-    getAvailability();
-  }, [language, dateValue]);
   return (
     <div className={styles.container}>
       <Head>
@@ -118,118 +42,51 @@ function Home() {
         </div>
         <Row className="row item" style={{ paddingTop: "150px" }}>
           <Col md={1}></Col>
+          {/* calender selection column */}
           <Col md={4}>
             <div className={styles.calenderClass}>
               {" "}
               <Calendar onChange={onDateChange} value={dateValue} />
             </div>
           </Col>
+
           <Col md={1}></Col>
+
+          {/* selection boxes */}
           <Col md={6}>
             <Container>
-              <div className={styles.secondCol}>
-                <Row className={styles.row}>
-                  <Col>
-                    <div className={styles.dateTitleClass}>
-                      {" "}
-                      {dateValue.toString().slice(0, 10)}
-                      {/* {language ? language.label : "NONE"} */}
-                    </div>
-                  </Col>
-                </Row>
-                <div className={styles.languageRow}>
-                  <div>Language:</div>
-                  <div>
-                    {" "}
-                    <span>
-                      <Select options={languages} onChange={onChangeLang} />
-                    </span>
-                  </div>
+              <div>
+                {/* buttons to select which one */}
+                <div style={{ display: "flex", padding: "10px" }}>
+                  <button
+                    style={{
+                      width: "70px",
+                      backgroundColor: "white",
+                      textAlign: "center",
+                      padding: "5px",
+                    }}
+                    onClick={(e) => setOption("make")}
+                  >
+                    Make
+                  </button>
+                  <button
+                    style={{
+                      width: "70px",
+                      backgroundColor: "white",
+                      textAlign: "center",
+                      padding: "5px",
+                    }}
+                    onClick={(e) => setOption("cancel")}
+                  >
+                    Cancel
+                  </button>
                 </div>
-
-                {/* Adding Getting Personel Data */}
-                <form onSubmit={handleSubmit} className={styles.form}>
-                  <div className={styles.nameRow}>
-                    <div className={styles.nameText}>Name: {"   "}</div>
-                    <div>
-                      <input
-                        placeholder="First..."
-                        className={styles.nameInput}
-                        type="text"
-                        value={firstnameINPUT}
-                        onChange={(e) => onFirstnameCHANGE(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      {" "}
-                      <input
-                        placeholder="Last..."
-                        className={styles.nameInput}
-                        type="text"
-                        value={lastnameINPUT}
-                        onChange={(e) => onLastnameCHANGE(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.idRow}>
-                    <div className={styles.nameText}>Student email:</div>
-                    <div>
-                      <input
-                        placeholder="...@middlebury.edu"
-                        type="text"
-                        value={studentEmail}
-                        onChange={(e) => setStudentEmail(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.idRow}>
-                    <div className={styles.nameText}>StudentID:</div>
-                    <div>
-                      <input
-                        placeholder="00......"
-                        type="text"
-                        value={studentID}
-                        onChange={(e) => setStudentID(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <Row className={styles.row}>
-                    <Col>
-                      <span>Course Selection:</span>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Select
-                        options={courses}
-                        onChange={changeCourse}
-                        className={styles.chooseCourse}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <div className={styles.submittionArea}>
-                      <div>
-                        <input
-                          type="submit"
-                          value="Submit"
-                          onSubmit={handleSubmit}
-                          className={styles.submitButton}
-                        />
-                      </div>
-                      <div
-                        className={
-                          parseInt(availabilitiy) == 0
-                            ? styles.notAvail
-                            : styles.Avail
-                        }
-                      >
-                        Available
-                      </div>
-                    </div>
-                  </Row>
-                </form>
               </div>
+              {option == "make" ? (
+                <MakeReservation date={dateValue} />
+              ) : (
+                <CancelReservation date={dateValue} />
+              )}
             </Container>
           </Col>
         </Row>

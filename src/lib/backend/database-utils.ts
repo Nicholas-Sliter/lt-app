@@ -21,6 +21,7 @@ export async function getDateInfo(datePassed, languagePassed): Promise<any> {
     date: datePassed,
     language: languagePassed,
   });
+  console.log("get date info api call returns," + review);
 
   if (!review) {
     return null;
@@ -75,9 +76,31 @@ export async function makeRes(
  */
 export async function getLanguageInfo(passedLanguage): Promise<any> {
   const languagetable = await knex("languages").where({ name: passedLanguage });
-
+  //console.log("api call for passed language is", languagetable);
   if (!languagetable) {
     return null;
   }
   return languagetable;
+}
+
+/**
+ * A function that canceles a reservation given student id and date
+ * @param middID middlebury id
+ * @param resDate the date of the reservation date
+ * @returns A promise that resolves to the review or null if it doesn't exist.
+ *
+ */
+export async function deleteRes(middID: any, resDate: any): Promise<any> {
+  //knex find by this date
+  //set iscancelled to true
+  const review = await knex("reservations").insert({
+    middlebury_ID: middID,
+    date: resDate,
+    is_cancelled: true,
+  });
+
+  if (!review) {
+    return null;
+  }
+  return review;
 }

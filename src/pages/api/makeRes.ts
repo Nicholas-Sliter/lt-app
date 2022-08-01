@@ -9,31 +9,25 @@ type Data = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  console.log("creating reservation with ", req.body);
   if (req.method == "POST") {
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const email = req.body.email;
-    const language = req.body.language;
-    const course = req.body.course;
-    const middID = req.body.middID;
-    const resDate = req.body.resDate;
-    const type = req.body.type;
-    const is_cancelled = req.body.is_cancelled;
-    const on_waitlist = req.body.on_waitlist;
-    const attended = req.body.attended;
+    //first make reservation
     const data = await makeRes(
-      firstName,
-      lastName,
-      email,
-      language,
-      course,
-      middID,
-      resDate,
-      type,
-      is_cancelled,
-      on_waitlist,
-      attended
+      req.body.firstName,
+      req.body.lastName,
+      req.body.email,
+      req.body.language,
+      req.body.course,
+      req.body.middID,
+      req.body.resDate,
+      req.body.type,
+      req.body.is_cancelled,
+      req.body.on_waitlist,
+      req.body.attended
     );
+
+    //send confirmation email
+    console.log('Send confirmation email')
   } else {
   }
 };
