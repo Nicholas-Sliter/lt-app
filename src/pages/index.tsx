@@ -57,10 +57,12 @@ function Home() {
             <Container>
               <div>
                 {/* buttons to select which one */}
-                <div style={{ display: "flex", padding: "10px" }}>
+                <div
+                  style={{ display: "flex", padding: "10px", width: "100%" }}
+                >
                   <button
                     style={{
-                      width: "70px",
+                      width: "50%",
                       backgroundColor: "white",
                       textAlign: "center",
                       padding: "5px",
@@ -71,7 +73,7 @@ function Home() {
                   </button>
                   <button
                     style={{
-                      width: "70px",
+                      width: "50%",
                       backgroundColor: "white",
                       textAlign: "center",
                       padding: "5px",

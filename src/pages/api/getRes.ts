@@ -2,22 +2,19 @@
 import { Result } from "antd";
 import { responsiveArray } from "antd/lib/_util/responsiveObserve";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { deleteRes } from "../../lib/backend/database-utils";
+import { getDateInfo, makeRes, getRes } from "../../lib/backend/database-utils";
 
 type Data = {
   name: string;
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  console.log("deleting reservation with ", req.body);
-  if (req.method == "POST") {
-    //first delete the reservation
-    const data = await deleteRes(req.body.id);
-
-    //send confirmation email
-    console.log("Send confirmation email");
-  } else {
-  }
+  console.log("creating reservation with ", req.body);
+  //first make reservation
+  const data = await getRes(req.body.middID).then((response: any) => {
+    console.log("api returnes,", response);
+    res.status(200).json({ data: response });
+  });
 };
 
 export default handler;
