@@ -1,15 +1,10 @@
 /**
  * Backend databse utililty functions
  */
-import knexConfig from "../../../knexfile.js";
-import knexInitializer from "knex";
-import { json } from "stream/consumers";
 
-export const knex = knexInitializer(
-  knexConfig[process.env.NODE_ENV || "development"]
-);
+import knex from "./knex";
 
-const params = [""];
+
 /**
  * A function that gets informaiton about a date
  * @param datePassed The date of the reservations to get.
@@ -80,4 +75,14 @@ export async function getLanguageInfo(passedLanguage): Promise<any> {
     return null;
   }
   return languagetable;
+}
+
+
+export async function getLanguages(): Promise<any> {
+  const languages = await knex("languages");
+
+  if (!languages) {
+    return null;
+  }
+  return languages;
 }
