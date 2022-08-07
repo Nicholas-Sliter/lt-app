@@ -1,13 +1,14 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getDateInfo } from "../../../src/lib/backend/database-utils";
+import { getLanguages } from "../../../../../lib/backend/database-utils";
+
 type Data = {
   name: string;
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+
   try {
-    const data = await getDateInfo();
+    const data = await getLanguages();
     console.log(data);
     res.status(200).end(JSON.stringify(data));
   } catch (e) {

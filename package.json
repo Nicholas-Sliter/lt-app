@@ -10,22 +10,32 @@
     "api-knex": "TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' knex --knexfile=./knexfile.ts"
   },
   "dependencies": {
-    "@vscode/sqlite3": "^5.0.7",
-    "add": "^2.0.6",
-    "knex": "^1.0.4",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.9.3",
+    "knex": "^0.95.15",
     "next": "12.1.0",
+    "next-connect": "^0.12.2",
     "react": "17.0.2",
+    "react-calendar": "^3.7.0",
     "react-dater": "^1.6.0",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.34.0",
+    "react-select": "^5.2.2",
+    "sass": "^1.49.9",
     "sassy-datepicker": "^0.8.0",
     "scss": "^0.2.4",
-    "sqlite3": "npm:@vscode/sqlite3@5.0.7"
+    "sqlite3": "^5.0.9",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@types/node": "17.0.21",
     "@types/react": "17.0.40",
+    "@types/react-calendar": "^3.5.2",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
+    "react-foundation": "^0.9.7",
+    "sweetalert2": "^11.4.23",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   }

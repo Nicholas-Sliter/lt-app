@@ -23,5 +23,5 @@ exports.up = function (knex, Promise) {
 };
 
 exports.down = function (knex, Promise) {
-  return knex.schema.dropTable("languages");
+  return knex.schema.dropTable("faculty").dropTable("courses").dropTable("languages");
 };

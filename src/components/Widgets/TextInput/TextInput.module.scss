@@ -1,0 +1,24 @@
+.container {
+    //display: inline;
+    //margin: 1rem;
+    padding: 1rem;
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+
+    &>div {
+        width: 100%;
+    }
+
+}
+
+
+.disabled {
+    pointer-events: none;
+
+    &>div>div {
+        background-color: #f0f0f0;
+    }
+}
