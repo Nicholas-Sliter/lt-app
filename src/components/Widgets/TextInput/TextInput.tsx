@@ -1,6 +1,6 @@
 import { Component } from "react";
 import styles from "./TextInput.module.scss";
-import { TextField } from "@mui/material";
+import { TextField, MenuItem } from "@mui/material";
 
 interface TextInputProps {
     name: string;
@@ -21,24 +21,40 @@ interface TextInputProps {
     error?: boolean;
     helperText?: string;
     internalLabel?: boolean;
+    select?: boolean;
+    options?: {
+        value: string | number;
+        label: string;
+    }[];
+    autoFocus?: boolean;
+    autoFocusIfEmpty?: boolean;
 
 }
 
 
 
-function TextInput({ name, label, title, register, validation, disabled = false }: TextInputProps) {
+function TextInput({ name, label, title, register, validation, disabled = false, select = false, options = [], autoFocus = false, autoFocusIfEmpty }: TextInputProps) {
+    const formFields = register(name, validation)
 
-    //const Label = label ? <label htmlFor={name}>{label}</label> : null;
     const Input = <TextField
         name={name}
         label={label}
         title={title ?? ""}
+        defaultValue={formFields?.defaultValue ?? }
         variant="outlined"
         disabled={disabled}
         size="small"
+        select={select}
+        autoFocus={autoFocus || (autoFocusIfEmpty && !formFields?.ref.current?.value)}
         required={Boolean(validation.required)}
-        {...register(name, validation)}
-    />;
+        {...formFields}
+    >
+        {select && options.map((option, index) =>
+            <MenuItem key={option.value} value={option.value}>
+                {option.label}
+            </MenuItem>
+        )}
+    </TextField>;
 
     return (
         <div className={styles.container}>

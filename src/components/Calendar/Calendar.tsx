@@ -1,5 +1,5 @@
 import React from "react";
-import Calendar from "react-calendar";
+import Calendar, { CalendarTileProperties } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { addDays, getNextWeekday } from "../../lib/frontend/utils";
 
@@ -7,9 +7,10 @@ import { addDays, getNextWeekday } from "../../lib/frontend/utils";
 interface CalendarProps {
   onChange: (date: Date) => void;
   value: Date;
+  disabled?: boolean;
 }
 
-function Calender({ onChange, value }: CalendarProps) {
+function Calender({ onChange, value, disabled }: CalendarProps) {
 
   const today = new Date();
   const minDate = today
@@ -18,6 +19,17 @@ function Calender({ onChange, value }: CalendarProps) {
   // don't bother with this, let's allow them to schedule special events on weekend
   const dateChangeHandler = (date: Date) => {
     onChange(getNextWeekday(date));
+  }
+
+  const disableDateHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
+    /** 
+     * Disable weekends
+     * Disable all dates if disabled is true
+     */
+    if (date.getDay() === 0 || date.getDay() === 6) {
+      return true;
+    }
+    return disabled ?? false;
   }
 
   return (
@@ -37,6 +49,8 @@ function Calender({ onChange, value }: CalendarProps) {
         maxDetail="month"
         prev2Label={null}
         next2Label={null}
+        tileDisabled={disableDateHandler}
+
       />
     </div>
   );

@@ -6,7 +6,7 @@ import Select from "react-select";
 import styles from "../styles/Home.module.scss";
 import Swal from "sweetalert2";
 import Calender from "../components/Calendar";
-import ReservationForm from "../components/ReservationForm/ReservationForm";
+import ReservationForm from "../components/ReservationForm";
 import Header from "../components/Header";
 
 function Home() {
@@ -100,7 +100,6 @@ function Home() {
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
       <Header />
-      <Calender onChange={() => { }} value={new Date} />
       <ReservationForm />
     </div>
   );
