@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 
 /**
@@ -7,15 +7,22 @@ import {useState, useEffect} from 'react';
  * @returns 
  */
 
-export default function useLanguages(){
-  const [languages, setLanguages] = useState([]);
+
+const DEFAULT_LANGUAGES = [
+  "French",
+  "Spanish",
+  "Chinese"];
+
+function useLanguages() {
+  const [languages, setLanguages] = useState(DEFAULT_LANGUAGES);
 
   useEffect(() => {
-    console.log('expensive operation here');
-    setExample('result of expensive operation');
-  }, [param_that_causes_recalculation]);
+    console.log('getting languages');
+  }, []);
 
 
-    return example;
+  return languages;
 
 }
+
+export default useLanguages;

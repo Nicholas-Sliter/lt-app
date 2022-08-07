@@ -1,7 +1,16 @@
-
-.tile {
-
+.tile {}
 
 
+.available {
+    color: green
+}
 
+.unavailable {
+    background-color: #f0f0f0;
+    color: rgba(16, 16, 16, 0.3);
+}
+
+
+.waitlist {
+    color: yellow
 }

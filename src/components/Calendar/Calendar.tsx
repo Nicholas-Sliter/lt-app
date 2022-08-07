@@ -1,6 +1,7 @@
 import React from "react";
 import Calendar, { CalendarTileProperties } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import styles from "./Calendar.module.scss";
 import { addDays, getNextWeekday } from "../../lib/frontend/utils";
 
 
@@ -8,17 +9,20 @@ interface CalendarProps {
   onChange: (date: Date) => void;
   value: Date;
   disabled?: boolean;
+  availability?: {
+    [date: string]: "available" | "unavailable" | "waitlist";
+  }
 }
 
-function Calender({ onChange, value, disabled }: CalendarProps) {
+function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 
   const today = new Date();
   const minDate = today
   const maxDate = addDays(today, 30);
 
-  // don't bother with this, let's allow them to schedule special events on weekend
   const dateChangeHandler = (date: Date) => {
-    onChange(getNextWeekday(date));
+    console.log(date)
+    onChange(date);
   }
 
   const disableDateHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
@@ -32,16 +36,15 @@ function Calender({ onChange, value, disabled }: CalendarProps) {
     return disabled ?? false;
   }
 
+  const tileClassNameHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
+    const status = availability?.[date.toISOString()] ?? "unavailable";
+    const className = styles[status];
+    return className;
+  }
+
   return (
     <div>
       <Calendar
-        style={{
-          margin: "1rem",
-          marginRight: "auto",
-          marginLeft: "auto",
-          borderRadius: "8px",
-        }
-        }
         onChange={dateChangeHandler}
         value={value}
         minDate={today}
@@ -50,6 +53,7 @@ function Calender({ onChange, value, disabled }: CalendarProps) {
         prev2Label={null}
         next2Label={null}
         tileDisabled={disableDateHandler}
+        tileClassName={tileClassNameHandler}
 
       />
     </div>

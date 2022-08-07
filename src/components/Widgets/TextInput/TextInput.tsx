@@ -7,7 +7,7 @@ interface TextInputProps {
     label?: string;
     title?: string;
     register: Function;
-    validation: {
+    validation?: {
         required?: string;
         min?: number;
         max?: number;
@@ -33,7 +33,7 @@ interface TextInputProps {
 
 
 
-function TextInput({ name, label, title, register, validation, disabled = false, select = false, options = [], autoFocus = false, autoFocusIfEmpty }: TextInputProps) {
+function TextInput({ name, label, title, register, validation = {}, disabled = false, select = false, options = [], autoFocus = false, autoFocusIfEmpty }: TextInputProps) {
     const formFields = register(name, validation)
 
     const Input = <TextField
@@ -46,7 +46,7 @@ function TextInput({ name, label, title, register, validation, disabled = false,
         size="small"
         select={select}
         autoFocus={autoFocus || (autoFocusIfEmpty && !formFields?.ref.current?.value)}
-        required={Boolean(validation.required)}
+        required={Boolean(validation?.required ?? false)}
         {...formFields}
     >
         {select && options.map((option, index) =>
@@ -56,8 +56,13 @@ function TextInput({ name, label, title, register, validation, disabled = false,
         )}
     </TextField>;
 
+    const classes = [styles.container];
+    if (disabled) {
+        classes.push(styles.disabled);
+    }
+
     return (
-        <div className={styles.container}>
+        <div className={classes.join(" ")}>
             {Input}
         </div>
     );

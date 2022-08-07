@@ -13,3 +13,12 @@
     }
 
 }
+
+
+.disabled {
+    pointer-events: none;
+
+    &>div>div {
+        background-color: #f0f0f0;
+    }
+}
