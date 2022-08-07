@@ -97,7 +97,8 @@ function Home() {
       <Head>
         <title>LT Reservation</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> */}
       </Head>
       <Header />
       <ReservationForm />

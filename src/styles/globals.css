@@ -15,13 +15,21 @@ body {
   border: none !important;
   outline: 1px solid #c4c4c4;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+  overflow: hidden;
 }
+
 
 /* Make each tile 1/5th of available space in a row, instead of default 1/7th */
 .react-calendar__month-view__days>.react-calendar__tile,
 .react-calendar__month-view__weekdays__weekday {
   flex-basis: 20% !important;
   max-width: 20% !important;
+}
+
+.react-calendar__month-view__days>.react-calendar__tile {
+  position: relative;
+  outline: 1px solid #fff;
+
 }
 
 /* Hide weekday labels */

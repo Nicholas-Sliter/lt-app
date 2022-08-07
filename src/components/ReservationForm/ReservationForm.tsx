@@ -122,14 +122,8 @@ function ReservationForm({
                 <Checkbox defaultChecked={false} title={"Save personal information"} />
             </FormBox>
             <FormBox invisible>
-                <Button onClick={handleSubmit(onSubmitHandler)} disabled={disabled}>Submit</Button>
+                <Button variant="contained" onClick={handleSubmit(onSubmitHandler)} disabled={disabled}>{true ? "Reserve" : "Join Waitlist"}</Button>
             </FormBox>
-            <Button
-                variant="contained"
-
-            >
-                Join Waitlist
-            </Button>
         </>
     );
 

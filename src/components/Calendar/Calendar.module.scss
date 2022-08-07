@@ -1,16 +1,59 @@
 .tile {}
 
 
-.available {
-    color: green
+.hidden {
+    display: none;
 }
 
+
+
+.availableIcon {
+    color: green;
+    font-size: 0.8rem;
+    border-radius: 0.8rem;
+    background-color: #ffffff;
+    position: absolute;
+    top: 0.2rem;
+    right: 0.5rem;
+}
+
+
+.icon {
+    font-size: 0.8rem;
+    border-radius: 0.8rem;
+    background-color: #ffffff !important;
+    position: absolute;
+    top: 0.2rem;
+    right: 0.5rem;
+}
+
+
 .unavailable {
-    background-color: #f0f0f0;
+    //background-color: #f0f0f0;
     color: rgba(16, 16, 16, 0.3);
 }
 
 
-.waitlist {
-    color: yellow
+.unavailableIcon {
+    color: red;
+
 }
+
+
+.available {
+    color: green
+}
+
+.waitlist {
+    color: orange;
+}
+
+.past {}
+
+
+.disabled {
+    background-color: #f0f0f0;
+    color: rgba(16, 16, 16, 0.3);
+}
+
+.selected {}
