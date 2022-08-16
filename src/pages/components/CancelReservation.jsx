@@ -61,7 +61,7 @@ export default function CancelReservation(props) {
         ></input>
         <button onClick={(e) => makeGetRes()}> Search </button>
       </div>
-      <div>
+      <div className={styles.listReservationsColumn}>
         {reservations.map((reservation) => {
           return (
             <div key={reservation.id} className={styles.reservationList}>
@@ -75,7 +75,7 @@ export default function CancelReservation(props) {
                   </button>
                 </div>
               ) : (
-                <div> no </div>
+                <div style={{ color: "red" }}> passed </div>
               )}
             </div>
           );

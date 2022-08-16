@@ -60,28 +60,57 @@ function Home() {
                 <div
                   style={{ display: "flex", padding: "10px", width: "100%" }}
                 >
-                  <button
-                    style={{
-                      width: "50%",
-                      backgroundColor: "white",
-                      textAlign: "center",
-                      padding: "5px",
-                    }}
-                    onClick={(e) => setOption("make")}
-                  >
-                    Make
-                  </button>
-                  <button
-                    style={{
-                      width: "50%",
-                      backgroundColor: "white",
-                      textAlign: "center",
-                      padding: "5px",
-                    }}
-                    onClick={(e) => setOption("cancel")}
-                  >
-                    Cancel
-                  </button>
+                  {option == "make" ? (
+                    <div style={{ width: "100%" }}>
+                      <button
+                        style={{
+                          width: "50%",
+                          backgroundColor: "red",
+                          textAlign: "center",
+                          padding: "5px",
+                        }}
+                        onClick={(e) => setOption("make")}
+                      >
+                        Make
+                      </button>
+                      <button
+                        style={{
+                          width: "50%",
+                          backgroundColor: "white",
+                          textAlign: "center",
+                          padding: "5px",
+                        }}
+                        onClick={(e) => setOption("cancel")}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ width: "100%" }}>
+                      <button
+                        style={{
+                          width: "50%",
+                          backgroundColor: "white",
+                          textAlign: "center",
+                          padding: "5px",
+                        }}
+                        onClick={(e) => setOption("make")}
+                      >
+                        Make
+                      </button>
+                      <button
+                        style={{
+                          width: "50%",
+                          backgroundColor: "red",
+                          textAlign: "center",
+                          padding: "5px",
+                        }}
+                        onClick={(e) => setOption("cancel")}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
               {option == "make" ? (

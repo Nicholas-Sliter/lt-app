@@ -168,7 +168,18 @@
 
 .reservationList {
   display: flex;
+  // white-space: 10px;
 }
 .reservationList div {
-  padding: 0 10px 0 10px;
+  margin: 0 20px 0 20px;
+}
+
+.listReservationsColumn {
+  height: 200px;
+  overflow: scroll;
+  padding: 0 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

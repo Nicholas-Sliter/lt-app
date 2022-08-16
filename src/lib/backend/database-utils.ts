@@ -74,7 +74,7 @@ export async function makeRes(
  * @returns the language info
  *
  */
-export async function getLanguageInfo(passedLanguage): Promise<any> {
+export async function getLanguageInfo(passedLanguage: any): Promise<any> {
   const languagetable = await knex("languages").where({
     name: passedLanguage,
   });
