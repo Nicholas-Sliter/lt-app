@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { languages, courses } from "../../data/expConst";
@@ -8,6 +9,7 @@ import Swal from "sweetalert2";
 import Calender from "../components/Calendar";
 import ReservationForm from "../components/ReservationForm";
 import Header from "../components/Header";
+
 
 function Home() {
   //define our states so we can access the data the user types
@@ -67,13 +69,13 @@ function Home() {
   };
 
   //function that checks the availability of the chosen date
-  const getAvailability = async () => {
+  const getAvailability = async ({ availParams }) => {
     console.log(language, dateValue);
     const response = await fetch("/api/checkAvail", {
       method: "POST",
       body: JSON.stringify({
-        date: dateValue,
-        language: language.label,
+        date: availParams.dateValue,
+        language: availParams.language.label,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -92,6 +94,10 @@ function Home() {
     //getAvailability();
   }, [language, dateValue]);
 
+  function testSubmit() {
+    console.log("wft");
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -101,7 +107,7 @@ function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> */}
       </Head>
       <Header />
-      <ReservationForm />
+      <ReservationForm onSubmit={testSubmit} getAvail={getAvailability} />
     </div>
   );
 }

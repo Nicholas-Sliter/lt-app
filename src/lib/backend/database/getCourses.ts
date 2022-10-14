@@ -1,4 +1,6 @@
 import knex from "../knex";
+import { courses } from "../../../../data/expConst.js"
+
 
 interface Course {
     name: string;
@@ -7,14 +9,17 @@ interface Course {
 
 
 async function getCourses(language: string): Promise<Course[]> {
-    const courses = await knex("courses")
-        .where("language", language)
-        .select("courses.name", "courses.code");
+    console.log("getCOuses with lang: ", language)
+    var posCourses = courses[language]
+    console.log("pos", posCourses)
+    // const courses = await knex("courses")
+    //     .where("language", language)
+    //     .select("courses.name", "courses.code");
 
-    if (!courses) {
+    if (!posCourses) {
         return [];
     }
-    return courses;
+    return posCourses;
 }
 
 

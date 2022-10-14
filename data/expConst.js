@@ -5,9 +5,9 @@ export const languages = [
   { label: "Spanish" },
 ];
 
-export const courses = [
-  //need to test if I can do nested json here
-  { label: "German 203" },
-  { label: "German 202" },
-  { label: "German 201" },
-];
+export const courses =  {
+  "german" : ["G100", "G200", "G300"],
+  "french" : ["F100", "F200", "F300"],
+  "spanish" : ["S100", "S200", "S300"],
+  "chinese" : ["S100", "S200", "S300"]
+};

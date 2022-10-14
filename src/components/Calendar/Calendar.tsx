@@ -21,7 +21,8 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
   const minDate = today
   const maxDate = addDays(today, 30);
 
-  console.log("value:", value)
+  console.log("value:" + value)
+  console.log("avail:", availability)
 
   const disableDateHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
     /** 
@@ -31,7 +32,8 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
     if (date.getDay() === 0 || date.getDay() === 6) {
       return true;
     }
-    return disabled ?? false;
+    // return disabled ?? false;
+    return false;
   }
 
 
@@ -43,6 +45,7 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
   }
 
   const tileStatusToClass = (status: string[]) => {
+    console.log("what is status", status)
     const classes: string[] = [];
     if (status.includes("disabled")) {
       classes.push(styles.disabled);
@@ -96,7 +99,11 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
     if (date.getTime() === value.getTime()) {
       return styles.selected;
     }
+    console.log("checking/setting className", availability, [date.toISOString()])
     const status = availability?.[date.toISOString()] ?? "unavailable";
+    if (status == "available") {
+      console.log("avail with, ", date)
+    }
     const className = styles[status];
     return className;
   }

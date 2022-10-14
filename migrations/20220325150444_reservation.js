@@ -20,7 +20,7 @@ exports.up = function (knex, Promise) {
       table.boolean("attended").defaultTo(null);
       table.dateTime("cancelled_at").defaultTo(null);
       table.dateTime("attended_at").defaultTo(null);
-      table.booleam("is_required").defaultTo(false).notNullable();
+      table.boolean("is_required").defaultTo(false).notNullable();
 
     })
     .createTable("waitlist", (table) => {

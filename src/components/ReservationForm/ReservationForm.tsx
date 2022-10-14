@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import TextInput from "../Widgets/TextInput";
 import styles from "./ReservationForm.module.scss";
@@ -30,15 +30,17 @@ interface FormData extends ReservationRequest {
 }
 
 interface ReservationFormProps {
-    onSubmit: (data: ReservationRequest) => void;
+    onSubmit: any;
     formData: FormData;
+    submitFunction,
 }
 
 
 function ReservationForm({
     onSubmit,
-    formData
-}: ReservationFormProps) {
+    formData,
+    submitFunction
+}) {
 
     const defaultValues = {
         date: formData?.date ?? getNextWeekday(new Date()),
@@ -48,11 +50,11 @@ function ReservationForm({
     }
 
     const { register, handleSubmit, watch, control } = useForm({ shouldUseNativeValidation: true, defaultValues });
-
+    const [isAvail, setIsAvail] = useState(true);
     const onSubmitHandler = (data) => {
         //convert formobj to reservation request
-        console.log(data);
-        onSubmit(data);
+        console.log("onSubmitHandler", data);
+        onSubmit()
     }
 
     const language = watch("language");
@@ -60,11 +62,16 @@ function ReservationForm({
 
     //TODO: make this into a fucntion
     const languages = (useLanguages() ?? []).map(l => ({ value: l, label: l }));
-    const courses = (useCourses(language) ?? []).map(c => ({ value: c.name, label: c.name }));
-
+    // const courses = (useCourses(language) ?? []).map(c => ({ value: c.name, label: c.name }));
+    const courses = useCourses(language).map(l => ({ value: l, label: l }))
     console.log(languages);
     console.log(courses);
 
+    var tempDate = new Date()
+    var var1 = "2022-10-18T04:00:00.000Z"
+    var testAvail = {};
+    testAvail[var1] = "available"
+    // console.log(var1.toISOString())
     return (
         // <Box className={styles.container}>
         //     <TextInput name="language" label="Language" title="Language" register={register} validation={{ required: "Please select a language" }} />
@@ -103,6 +110,7 @@ function ReservationForm({
                             onChange={field.onChange}
                             value={field.value}
                             disabled={disabled}
+                            availability={testAvail}
                         />)
                 }}
             />
