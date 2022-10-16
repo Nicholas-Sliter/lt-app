@@ -32,17 +32,17 @@ interface FormData extends ReservationRequest {
 interface ReservationFormProps {
     onSubmit: any;
     formData: FormData;
-    submitFunction,
+    submitFunction: any;
+    makeReservation: any;
+    getAvail: any;
 }
 
 
 function ReservationForm({
-    onSubmit,
     formData,
-    submitFunction,
     getAvail,
-    makeReservation
-}) {
+    makeReservation,
+}: ReservationFormProps) {
 
     const [currentLang, setCurrentLang] = useState(null);
 
@@ -54,8 +54,8 @@ function ReservationForm({
     }
 
     const { register, handleSubmit, watch, control } = useForm({ shouldUseNativeValidation: true, defaultValues });
-    const [avail, setAvail] = useState(true);
-    const onSubmitHandler = (data) => {
+    const [avail, setAvail] = useState({});
+    const onSubmitHandler = (data: { first_name: string, last_name: string, email: string, language: string, date: Date, course: string; middlebury_id: string }) => {
         //convert formobj to reservation request
         console.log("onSubmitHandler", data);
         makeReservation(data.first_name, data.last_name, data.email, data.language.toLowerCase(), data.date.toISOString(), data.course, data.middlebury_id)
@@ -73,7 +73,7 @@ function ReservationForm({
     if (language != null && language != currentLang) {
         setCurrentLang(language)
         catchChange(language)
-        getAvail(language).then(result => setAvail(result))
+        getAvail(language).then((result: { [key: string]: string }) => setAvail(result))
     }
 
 

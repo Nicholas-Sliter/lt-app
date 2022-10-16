@@ -106,17 +106,19 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
   const tileClassNameHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
     if (date.getTime() === value.getTime()) {
       return styles.selected;
-    }
-    const status = "unavailable"
+    } let status = "unavailable"
     // console.log("handler avail", availability.data)
-    if (date.toISOString() in availability.data) {
-      status = availability.data[date.toISOString()]
+    if (availability?.data != undefined) {
+      if (date.toISOString() in availability.data) {
+        status = availability.data[date.toISOString()]
+      }
+      // availability?.[date.toISOString()] ?? "unavailable";
+      // console.log("what is status?", status)
+      const className = styles[status];
+      return className;
     }
-    // availability?.[date.toISOString()] ?? "unavailable";
-    // console.log("what is status?", status)
-    const className = styles[status];
-    return className;
   }
+
 
   const dateChangeHandler = (date: Date) => {
     //prevent changing dates to disabled dates

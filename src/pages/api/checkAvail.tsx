@@ -11,13 +11,14 @@ import { addDays, getNextWeekday } from "../../lib/frontend/utils";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method == "POST") {
-    //first get the information for the requested date and language to see number of seats taken already
 
-    //for each date in the range: 
-    let returnDict = {};
 
+    let returnDict: { [key: string]: string } = {};
+
+    //TODO - make today in this time format (T04 is important)
     const today = new Date("2022-10-18T04:00:00.000Z");//2022-10-18T04:00:00.000Z
-    // console.log("in api with ", req.body);
+
+    //first see how many max seats we have for that language
     var languageRes = await getLanguageInfo(req.body.language)
     if (await languageRes != undefined) {
       var max_seats =
@@ -26,13 +27,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         await languageRes[0].reserved_seats;
       // console.log(max_seats);
 
+      //check the availability for each date in the next 30 days
       for (var i = 0; i < 30; i++) {
         const nextDate = addDays(today, i);
-        // console.log("next day: ", nextDate.toISOString())
         var returned = await getDateInfo(nextDate, req.body.language.toLowerCase())
-        // console.log("getDateInfo return for", nextDate, " and", req.body.language.toLowerCase(), "is: ", returned)
         var takenSeats = await returned.length;
         var availible = await max_seats - takenSeats;
+        //should be avail > 0 = avail, but using 21 to see changes on calender.
         if (await availible < 21) {
           returnDict[nextDate.toISOString()] = "unavailable";
         } else {
