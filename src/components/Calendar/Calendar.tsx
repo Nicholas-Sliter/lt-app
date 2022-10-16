@@ -21,10 +21,10 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
   const minDate = today
   const maxDate = addDays(today, 30);
 
-  console.log("value:" + value)
-  console.log("avail:", availability)
+  console.log("value:", value)
 
   const disableDateHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
+    //true = disabled
     /** 
      * Disable weekends
      * Disable all dates if disabled is true
@@ -32,8 +32,12 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
     if (date.getDay() === 0 || date.getDay() === 6) {
       return true;
     }
-    // return disabled ?? false;
-    return false;
+    if (availability?.date == "unavailable") {
+      return true;
+    } else {
+      return false
+    }
+    return disabled ?? false;
   }
 
 
@@ -41,11 +45,15 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
     if (date.getDay() === 0 || date.getDay() === 6) {
       return true;
     }
+    if (availability?.date == "available") {
+      return false;
+    } else {
+      return true
+    }
     return disabled ?? false;
   }
 
   const tileStatusToClass = (status: string[]) => {
-    console.log("what is status", status)
     const classes: string[] = [];
     if (status.includes("disabled")) {
       classes.push(styles.disabled);
@@ -99,11 +107,13 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
     if (date.getTime() === value.getTime()) {
       return styles.selected;
     }
-    console.log("checking/setting className", availability, [date.toISOString()])
-    const status = availability?.[date.toISOString()] ?? "unavailable";
-    if (status == "available") {
-      console.log("avail with, ", date)
+    const status = "unavailable"
+    // console.log("handler avail", availability.data)
+    if (date.toISOString() in availability.data) {
+      status = availability.data[date.toISOString()]
     }
+    // availability?.[date.toISOString()] ?? "unavailable";
+    // console.log("what is status?", status)
     const className = styles[status];
     return className;
   }

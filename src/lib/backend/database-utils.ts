@@ -13,10 +13,10 @@ import knex from "./knex";
  */
 export async function getDateInfo(datePassed, languagePassed): Promise<any> {
   const review = await knex("reservations").where({
-    date: datePassed,
+    date: datePassed.toISOString(),
     language: languagePassed,
   });
-
+  // console.log("in get date info and got", review, "with:", datePassed.toISOString(), languagePassed)
   if (!review) {
     return null;
   }
@@ -68,9 +68,10 @@ export async function makeRes(
  * @returns the language info
  *
  */
-export async function getLanguageInfo(passedLanguage): Promise<any> {
-  const languagetable = await knex("languages").where({ name: passedLanguage });
-
+export async function getLanguageInfo(passedLanguage: string): Promise<any> {
+  console.log("in passed language:", passedLanguage);
+  const languagetable = await knex("languages").where({ name: passedLanguage.toLowerCase() });
+  // console.log("did search get any info?", languagetable)
   if (!languagetable) {
     return null;
   }

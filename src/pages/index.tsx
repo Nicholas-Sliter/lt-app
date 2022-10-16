@@ -44,17 +44,17 @@ function Home() {
   };
 
   //to submit a book into the database
-  const submitRes = async () => {
+  const submitRes = async (fname, lname, email, language, resDate, course, id, type, isCancel, attended) => {
     const response = await fetch("/api/makeRes", {
       method: "POST",
       body: JSON.stringify({
-        firstName: firstnameINPUT,
-        lastName: lastnameINPUT,
-        email: studentEmail,
-        language: language.label,
+        firstName: fname,
+        lastName: lname,
+        email: email,
+        language: language,
         course: course,
-        middID: studentID,
-        resDate: dateValue,
+        middID: id,
+        resDate: resDate,
         type: "student",
         is_cancelled: false,
         on_waitlist: false,
@@ -69,22 +69,20 @@ function Home() {
   };
 
   //function that checks the availability of the chosen date
-  const getAvailability = async ({ availParams }) => {
-    console.log(language, dateValue);
+  const getAvailability = async (availLang) => {
+    // console.log("in getAvailability, with", availDate, availLang);
     const response = await fetch("/api/checkAvail", {
       method: "POST",
       body: JSON.stringify({
-        date: availParams.dateValue,
-        language: availParams.language.label,
+        language: availLang,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json().then((retuend) => {
-      console.log(retuend);
-      setavailabilitiy(retuend.data);
-    });
+    const data = await response.json()
+    return data;
+
   };
 
   const defaultOption = languages[0];
@@ -107,7 +105,7 @@ function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> */}
       </Head>
       <Header />
-      <ReservationForm onSubmit={testSubmit} getAvail={getAvailability} />
+      <ReservationForm getAvail={getAvailability} makeReservation={submitRes} />
     </div>
   );
 }

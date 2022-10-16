@@ -21,6 +21,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const is_cancelled = req.body.is_cancelled;
     const on_waitlist = req.body.on_waitlist;
     const attended = req.body.attended;
+    console.log(firstName,
+      lastName,
+      email,
+      language,
+      course,
+      middID,
+      resDate,
+      type,
+      is_cancelled,
+      on_waitlist,
+      attended)
     const data = await makeRes(
       firstName,
       lastName,

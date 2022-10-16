@@ -5,6 +5,7 @@ import { TextField, MenuItem } from "@mui/material";
 interface TextInputProps {
     name: string;
     label?: string;
+    onChange?: any;
     title?: string;
     register: Function;
     validation?: {
@@ -33,7 +34,7 @@ interface TextInputProps {
 
 
 
-function TextInput({ name, label, title, register, validation = {}, disabled = false, select = false, options = [], autoFocus = false, autoFocusIfEmpty }: TextInputProps) {
+function TextInput({ name, label, title, onChange, register, validation = {}, disabled = false, select = false, options = [], autoFocus = false, autoFocusIfEmpty }: TextInputProps) {
     const formFields = register(name, validation)
 
     const Input = <TextField
@@ -45,6 +46,7 @@ function TextInput({ name, label, title, register, validation = {}, disabled = f
         disabled={disabled}
         size="small"
         select={select}
+        onChange={onChange}
         autoFocus={autoFocus || (autoFocusIfEmpty && !formFields?.ref.current?.value)}
         required={Boolean(validation?.required ?? false)}
         {...formFields}

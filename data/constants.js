@@ -1,2 +1,2 @@
-const languages = ["French", "English", "German", "Spanish"];
+const languages = ["french", "english", "german", "spanish"];
 module.exports = { languages };
