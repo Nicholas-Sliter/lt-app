@@ -4,7 +4,6 @@
 
 import knex from "./knex";
 
-
 /**
  * A function that gets informaiton about a date
  * @param datePassed The date of the reservations to get.
@@ -12,15 +11,16 @@ import knex from "./knex";
  *
  */
 export async function getDateInfo(datePassed, languagePassed): Promise<any> {
-  const review = await knex("reservations").where({
-    date: datePassed.toISOString(),
-    language: languagePassed,
-  });
-  // console.log("in get date info and got", review, "with:", datePassed.toISOString(), languagePassed)
-  if (!review) {
-    return null;
-  }
-  return review;
+    console.log("in getdate info", datePassed, languagePassed);
+    const review = await knex("reservations").where({
+        date: datePassed,
+        language: languagePassed.toLowerCase(),
+    });
+    // console.log("in get date info and got", review, "with:", datePassed.toISOString(), languagePassed)
+    if (!review) {
+        return [];
+    }
+    return review;
 }
 
 /**
@@ -30,36 +30,36 @@ export async function getDateInfo(datePassed, languagePassed): Promise<any> {
  *
  */
 export async function makeRes(
-  firstName: any,
-  lastName: any,
-  email: any,
-  language: any,
-  course: any,
-  middID: any,
-  resDate: any,
-  type: any,
-  is_cancelled: any,
-  on_waitlist: any,
-  attended: any
+    firstName: any,
+    lastName: any,
+    email: any,
+    language: any,
+    course: any,
+    middID: any,
+    resDate: any,
+    type: any,
+    is_cancelled: any,
+    on_waitlist: any,
+    attended: any
 ): Promise<any> {
-  const review = await knex("reservations").insert({
-    first_name: firstName,
-    last_name: lastName,
-    email: email,
-    middlebury_ID: middID,
-    language: language,
-    type: "student",
-    date: resDate,
-    is_cancelled: is_cancelled,
-    on_waitlist: on_waitlist,
-    attended: attended,
-    created_at: resDate,
-  });
+    const review = await knex("reservations").insert({
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        middlebury_ID: middID,
+        language: language,
+        type: "student",
+        date: resDate,
+        is_cancelled: is_cancelled,
+        on_waitlist: on_waitlist,
+        attended: attended,
+        created_at: resDate,
+    });
 
-  if (!review) {
-    return null;
-  }
-  return review;
+    if (!review) {
+        return null;
+    }
+    return review;
 }
 
 /**
@@ -69,21 +69,22 @@ export async function makeRes(
  *
  */
 export async function getLanguageInfo(passedLanguage: string): Promise<any> {
-  console.log("in passed language:", passedLanguage);
-  const languagetable = await knex("languages").where({ name: passedLanguage.toLowerCase() });
-  // console.log("did search get any info?", languagetable)
-  if (!languagetable) {
-    return null;
-  }
-  return languagetable;
+    console.log("in passed language:", passedLanguage);
+    const languagetable = await knex("languages").where({
+        name: passedLanguage.toLowerCase(),
+    });
+    // console.log("did search get any info?", languagetable)
+    if (!languagetable) {
+        return null;
+    }
+    return languagetable;
 }
 
-
 export async function getLanguages(): Promise<any> {
-  const languages = await knex("languages");
+    const languages = await knex("languages");
 
-  if (!languages) {
-    return null;
-  }
-  return languages;
+    if (!languages) {
+        return null;
+    }
+    return languages;
 }

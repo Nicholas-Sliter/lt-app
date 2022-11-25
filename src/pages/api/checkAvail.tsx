@@ -16,7 +16,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let returnDict: { [key: string]: string } = {};
 
     //TODO - make today in this time format (T04 is important)
-    const today = new Date("2022-10-18T04:00:00.000Z");//2022-10-18T04:00:00.000Z
+    // const today = new Date("2022-10-18T04:00:00.000Z");//2022-10-18T04:00:00.000Z
+    const today = new Date().toISOString().split("T")[0] + "T05:00:00.000Z"
+    console.log("today's date ", today)
 
     //first see how many max seats we have for that language
     var languageRes = await getLanguageInfo(req.body.language)
