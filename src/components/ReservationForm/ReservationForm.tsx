@@ -178,6 +178,7 @@ function ReservationForm({
                         console.log("changed the course: ", e.target.value);
                         setSelectedCourse(e.target.value);
                     }}
+
                 >
                     {selectedLanguage &&
                         courses[selectedLanguage].map((option, index) => (
