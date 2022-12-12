@@ -169,14 +169,13 @@ function ReservationForm({
                     name="course"
                     label="Course"
                     title="Course"
-                    defaultValue={courses[selectedLanguage][0] ?? null}
+                    defaultValue={null}
                     autoFocusIfEmpty
                     variant="outlined"
-                    // disabled={disabled}
                     size="small"
                     select
                     onChange={(e) => {
-                        console.log(e.target.value);
+                        console.log("changed the course: ", e.target.value);
                         setSelectedCourse(e.target.value);
                     }}
                 >
