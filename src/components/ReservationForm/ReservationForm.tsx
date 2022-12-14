@@ -53,6 +53,7 @@ function ReservationForm({
         defaultValues,
     });
     const [avail, setAvail] = useState({});
+    const [currentDateAvail, setCurrentDateAvail] = useState(true)
     const [selectedLanguage, setSelectedLanguage] = useState(
         languages[0].value
     );
@@ -65,56 +66,10 @@ function ReservationForm({
     const [email, setEmail] = useState();
     const [ID, setID] = useState();
 
-    // const onSubmitHandler = (data: {
-    //     first_name: string;
-    //     last_name: string;
-    //     email: string;
-    //     language: string;
-    //     date: Date;
-    //     course: string;
-    //     middlebury_id: string;
-    // }) => {
-    //     //convert formobj to reservation request
-    //     console.log("onSubmitHandler", data);
-    //     makeReservation(
-    //         data.first_name,
-    //         data.last_name,
-    //         data.email,
-    //         data.language.toLowerCase(),
-    //         data.date,
-    //         data.course,
-    //         data.middlebury_id
-    //     );
-    // };
-
     const catchChange = async (curLang: string) => {
         console.log("language change");
-        // var curData = getAvail("2022-10-18T04:00:00.000Z", curLang.toLowerCase()).then(res => console.log("res", res))
-        //  console.log("got:", curData)
     };
-
-    // const language = watch("language");
-
-    // if (language != null && language != currentLang) {
-    //     setCurrentLang(language);
-    //     catchChange(language);
-    //     getAvail(language).then((result: { [key: string]: string }) =>
-    //         setAvail(result)
-    //     );
-    // }
-
-    // const disabled = !Boolean(language);
-
-    // //TODO: make this into a fucntion
-    // const languages = (useLanguages() ?? []).map((l) => ({
-    //     value: l,
-    //     label: l,
-    // }));
-    // // const courses = (useCourses(language) ?? []).map(c => ({ value: c.name, label: c.name }));
-    // const courses = useCourses("language").map((l) => ({ value: l, label: l }));
-    // console.log(languages);
-    // console.log("courses:", courses);
-
+    
     const coursesObj = courses;
     const submitButton = (e) => {
         console.log(
@@ -137,14 +92,22 @@ function ReservationForm({
             ID
         );
     };
-    // console.log(var1.toISOString())
+    
+    const getAvailability = async (newLanguage) => {
+        console.log("newLanguage")
+        var returnedAvail = await getAvail(newLanguage);
+        console.log("returns New avail:", await returnedAvail)
+        setAvail(await returnedAvail)
+    }
     return (
         <>
             <FormBox>
+                <div className = {styles.language}>
+                    <div className = {styles.courseTitle}>Langauge:</div>
                 <TextField
                     name="language"
-                    label="Language"
-                    title="Language"
+                    label=""
+                    title=""
                     defaultValue={languages[0].value ?? null}
                     autoFocusIfEmpty
                     variant="outlined"
@@ -155,8 +118,10 @@ function ReservationForm({
                     // register={register}
                     validation={{ required: "Please select a language" }}
                     onChange={(e) => {
-                        console.log(e.target.value);
+                        console.log("changed langauge:", e.target.value);
                         setSelectedLanguage(e.target.value);
+                        getAvailability(e.target.value)
+
                     }}
                 >
                     {languages.map((option, index) => (
@@ -165,14 +130,20 @@ function ReservationForm({
                         </MenuItem>
                     ))}
                 </TextField>
+                </div>
+                <div className = {styles.courseName}>
+                    <div className = {styles.courseTitle}>Course</div>
                 <TextField
                     name="course"
-                    label="Course"
-                    title="Course"
+                    label=""
+                    title=""
                     defaultValue={null}
                     autoFocusIfEmpty
                     variant="outlined"
+                    classes = {styles.textTest}
                     size="small"
+                    placeholder="P"
+                    fullWidth
                     select
                     onChange={(e) => {
                         console.log("changed the course: ", e.target.value);
@@ -186,13 +157,14 @@ function ReservationForm({
                             </MenuItem>
                         ))}
                 </TextField>
+                </div>
             </FormBox>
             <Calendar
                 value={selectedDate}
                 availability={avail}
                 language={selectedLanguage}
                 onChange={(e) => {
-                    console.log("e:", e.toISOString().split("T")[0]);
+                    console.log("e:", e.toISOString());
                     setSelectedDate(e.toISOString().split("T")[0]);
                 }}
             />
@@ -259,7 +231,7 @@ function ReservationForm({
                     onClick={submitButton}
                     // disabled={disabled}
                 >
-                    {true ? "Reserve" : "Join Waitlist"}
+                    { currentDateAvail ? "Reserve" : "Join Waitlist"}
                 </Button>
             </FormBox>
         </>

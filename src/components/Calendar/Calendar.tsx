@@ -15,6 +15,15 @@ interface CalendarProps {
 }
 
 function Calender({ onChange, value, disabled, availability }: CalendarProps) {
+    console.log("in calender: got: ", availability)
+    var newAvail = {}
+    if(availability.data != null) {
+    for (let [key,value] of Object.entries(availability.data)) {
+        console.log("log:", key, value);        
+        newAvail[key+"T05:00:00.000Z"] = value
+    }
+    console.log("newAvail: ", newAvail, "new availability object", availabilty)
+    }
     const today = new Date();
     const minDate = today;
     const maxDate = addDays(today, 30);

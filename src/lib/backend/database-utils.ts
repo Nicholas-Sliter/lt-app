@@ -11,7 +11,7 @@ import knex from "./knex";
  *
  */
 export async function getDateInfo(datePassed, languagePassed): Promise<any> {
-    console.log("in getdate info", datePassed, languagePassed);
+    console.log("in getdate info in database Utils", datePassed, languagePassed);
     const review = await knex("reservations").where({
         date: datePassed,
         language: languagePassed.toLowerCase(),

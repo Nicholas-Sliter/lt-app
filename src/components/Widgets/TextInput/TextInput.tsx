@@ -74,6 +74,8 @@ function TextInput({
     );
 
     const classes = [styles.container];
+    classes.push("min-width:1000px");
+    console.log("printing from text input:", classes)
     if (disabled) {
         classes.push(styles.disabled);
     }

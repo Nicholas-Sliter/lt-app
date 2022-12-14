@@ -11,7 +11,8 @@ import { addDays, getNextWeekday } from "../../lib/frontend/utils";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method == "POST") {
-
+    
+    console.log("in getAvail API call. the passed data is: ", req.body.data, ", and the language is:", req.body.langauge)
 
     let returnDict: { [key: string]: string } = {};
 
@@ -27,19 +28,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         await languageRes[0].tablesOf8 * 8 +
         await languageRes[0].tablesOf6 * 6 -
         await languageRes[0].reserved_seats;
-      // console.log(max_seats);
+        console.log("max seats: ", max_seats);
 
       //check the availability for each date in the next 30 days
       for (var i = 0; i < 30; i++) {
         const nextDate = addDays(today, i);
-        var returned = await getDateInfo(nextDate, req.body.language.toLowerCase())
+        var returned = await getDateInfo(nextDate.toISOString().split("T")[0], req.body.language.toLowerCase())
+        console.log("getDateInfo returns:", await returned)
         var takenSeats = await returned.length;
         var availible = await max_seats - takenSeats;
         //should be avail > 0 = avail, but using 21 to see changes on calender.
+        
         if (await availible < 21) {
-          returnDict[nextDate.toISOString()] = "unavailable";
+        //if (await availible < 21) {
+          returnDict[nextDate.toISOString().split("T")[0]] = "unavailable";
         } else {
-          returnDict[nextDate.toISOString()] = "available";
+          returnDict[nextDate.toISOString().split("T")[0]] = "available";
         }
 
 
