@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("in getAvail API call. the passed data is: ", req.body.data, ", and the language is:", req.body.langauge)
 
     let returnDict: { [key: string]: string } = {};
-
     //TODO - make today in this time format (T04 is important)
     // const today = new Date("2022-10-18T04:00:00.000Z");//2022-10-18T04:00:00.000Z
     const today = new Date().toISOString().split("T")[0] + "T05:00:00.000Z"
@@ -34,14 +33,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       for (var i = 0; i < 30; i++) {
         const nextDate = addDays(today, i);
         var returned = await getDateInfo(nextDate.toISOString().split("T")[0], req.body.language.toLowerCase())
-        console.log("getDateInfo returns:", await returned)
         var takenSeats = await returned.length;
         var availible = await max_seats - takenSeats;
         //should be avail > 0 = avail, but using 21 to see changes on calender.
         
         if (await availible < 21) {
         //if (await availible < 21) {
-          returnDict[nextDate.toISOString().split("T")[0]] = "unavailable";
+          console.log("unav", nextDate.toISOString())
+          returnDict[nextDate.toISOString().split("T")[0]] = "waitlist";
         } else {
           returnDict[nextDate.toISOString().split("T")[0]] = "available";
         }
