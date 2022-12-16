@@ -23,7 +23,7 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 			console.log("log:", key, value);
 			newAvail[key + "T05:00:00.000Z"] = value;
 		}
-//		var availability = newAvail;
+		//		var availability = newAvail;
 		console.log(
 			"newAvail: ",
 			newAvail,
@@ -47,7 +47,7 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 
 	console.log("in calender object passed with", value, "new date:", newDate);
 
-	const disableDateHandler = ({
+	const getDateClass = ({
 		activeStartDate,
 		date,
 		view,
@@ -57,30 +57,48 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 		 * Disable weekends
 		 * Disable all dates if disabled is true
 		 */
+		//	console.log("in disableDateHandler with date:", date.toISOString());
+		/*	console.log(
+			"newAvail[date.toIsoshit] is ",
+			newAvail[date.toISOString()]
+		);
+	 */
 		if (date.getDay() === 0 || date.getDay() === 6) {
-			return true;
+			return "unavailable";
+			//return true;
 		}
 		if (newAvail[date.toISOString()] == "unavailable") {
-			return true;
-		} else {
-			return false;
+			return "unavailable";
+			//return true;
+		}
+		if (
+			newAvail[date.toISOString()] == "available" ||
+			newAvail[date.toISOString()] == "waitlist"
+		) {
+			return "available";
+			//return false;
 		}
 
-		return disabled ?? false;
+		return "unavailable";
 	};
-
+	// how we know wether to disable date or not
 	const tileDisabled = (date: Date) => {
+		// false = enabled. true = disabled
+		return true;
 		if (date.getDay() === 0 || date.getDay() === 6) {
 			return true;
 		}
-		if (newAvail[date.toISOString()]= "available") {
+		if (
+			newAvail[date.toISOString()] == "available" ||
+			newAvail[date.toISOString()] == "waitlist"
+		) {
 			return false;
 		} else {
 			return true;
 		}
-		return disabled ?? false;
+		return disabled ?? true;
 	};
-
+	/*
 	const tileStatusToClass = (status: string[]) => {
 		const classes: string[] = [];
 		if (status.includes("disabled")) {
@@ -103,15 +121,16 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 		}
 		return classes.join(" ");
 	};
-
+ */
+	/*
 	const tileStatusHandler = ({
 		activeStartDate,
 		date,
 		view,
 	}: CalendarTileProperties) => {
-		/**
-		 * Handle both disabled and availability
-		 */
+	//	
+		// Handle both disabled and availability
+		 //
 
 		const statusArray: string[] = [];
 		if (tileDisabled(date)) {
@@ -128,14 +147,14 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 		}
 
 		if (availability) {
-			statusArray.push(
-				newAvail[date.toISOString()] ?? "unavailable"
-			);
+			statusArray.push(newAvail[date.toISOString()] ?? "unavailable");
 		}
 
 		return statusArray;
 	};
+	*/
 
+	// sets classes based on availability
 	const tileClassNameHandler = ({
 		activeStartDate,
 		date,
@@ -147,8 +166,10 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 		let status = "unavailable";
 		if (date.toISOString() in newAvail) {
 			status = newAvail[date.toISOString()];
+			//console.log("date in newAvail");
+			status = newAvail[date.toISOString()];
 		}
-		console.log(
+		/*		console.log(
 			"availability.data: ",
 			availability?.data,
 			", and",
@@ -156,17 +177,19 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 			"for date: ",
 			date.toISOString()
 		);
-
+ */
 		const className = styles[status];
 		return className;
 	};
 
+	// handles if we can click on a date or not
 	const dateChangeHandler = (date: Date) => {
 		//prevent changing dates to disabled dates
-		if (
-			disableDateHandler({ activeStartDate: date, date, view: "month" })
-		) {
+		if (getDateClass == "unavailable") {
+			//	console.log("disableDate handler returned true");
 			return;
+		} else {
+			//	console.log("disableDate handler returned false");
 		}
 		onChange(date);
 	};
@@ -182,18 +205,17 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 				minDetail="month"
 				prev2Label={null}
 				next2Label={null}
-				tileDisabled={disableDateHandler}
+				//				tileDisabled={disableDateHandler}
 				tileClassName={tileClassNameHandler}
 				tileContent={({ date, view }) => {
-					const hidden = disableDateHandler({
+					const hidden = getDateClass({
 						activeStartDate: date,
 						date,
 						view,
 					});
-					if (hidden) {
-						return null;
-					}
-					return <AvailabilityIndicator availability="unavailable" />;
+					//}
+//					console.log("what is hidden?", hidden);
+					return <AvailabilityIndicator availability={hidden} />;
 				}}
 			/>
 		</div>
