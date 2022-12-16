@@ -166,6 +166,9 @@ function ReservationForm({
                 onChange={(e) => {
                     console.log("e:", e.toISOString());
                     setSelectedDate(e.toISOString().split("T")[0]);
+                    console.log("availability: ", avail)
+                    console.log("avail test, ", avail.data?.[e.toISOString().split("T")[0]]);
+                   setCurrentDateAvail(avail.data?.[e.toISOString().split("T")[0]]) 
                 }}
             />
             <FormBox>
@@ -231,7 +234,7 @@ function ReservationForm({
                     onClick={submitButton}
                     // disabled={disabled}
                 >
-                    { currentDateAvail ? "Reserve" : "Join Waitlist"}
+                    { currentDateAvail == "Unavailable" ? "Reserve" : currentDateAvail == "waitlist" ? "Join Waitlist" : "Reserve"}
                 </Button>
             </FormBox>
         </>

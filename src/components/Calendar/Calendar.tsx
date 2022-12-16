@@ -18,18 +18,20 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 	console.log("in calender: got: ", availability);
 	var newAvail = {};
 	if (availability != null && availability?.data != null) {
-		console.log("availabiltiy is not null: ", availability);
+		//console.log("availabiltiy is not null: ", availability);
 		for (let [key, value] of Object.entries(availability.data)) {
-			console.log("log:", key, value);
+			//console.log("log:", key, value);
 			newAvail[key + "T05:00:00.000Z"] = value;
 		}
 		//		var availability = newAvail;
+		/*
 		console.log(
 			"newAvail: ",
 			newAvail,
 			"new availability object",
 			availability
 		);
+		 */
 	}
 
 	const today = new Date();
