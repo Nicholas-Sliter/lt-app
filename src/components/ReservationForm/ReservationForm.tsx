@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import TextInput from "../Widgets/TextInput";
 import styles from "./ReservationForm.module.scss";
@@ -9,7 +9,7 @@ import { getNextWeekday } from "../../lib/frontend/utils";
 import useCourses from "../../hooks/useCourses";
 import useLanguages from "../../hooks/useLanguages";
 import { courses, languages } from "../../../data/expConst";
-
+import Swal from "sweetalert2";
 interface ReservationRequest {
 	date: Date;
 	first_name?: string;
@@ -40,8 +40,6 @@ function ReservationForm({
 	getAvail,
 	makeReservation,
 }: ReservationFormProps) {
-	const [currentLang, setCurrentLang] = useState(null);
-
 	const defaultValues = {
 		date: formData?.date ?? getNextWeekday(new Date()),
 		language: null, //formData?.language ?? "English",
@@ -65,6 +63,7 @@ function ReservationForm({
 	const [lastName, setLastName] = useState();
 	const [email, setEmail] = useState();
 	const [ID, setID] = useState();
+	const [courseVal, setCourseVal] = useState(courses['Spanish'][0]);
 
 	const catchChange = async (curLang: string) => {
 		console.log("language change");
@@ -95,6 +94,8 @@ function ReservationForm({
             currentDateAvail,
 			false
 		);
+		
+		getAvailability(selectedLanguage)
 	};
 
 	const getAvailability = async (newLanguage) => {
@@ -103,6 +104,18 @@ function ReservationForm({
 		console.log("returns New avail:", await returnedAvail);
 		setAvail(await returnedAvail);
 	};
+
+	useEffect(() => {
+		getAvailability("spanish")
+	}, [])
+		/*
+	useEffect(() => {
+		var tempLang = selectedLanguage;
+		//tempLang[0] = tempLang[0].toUpperCase() 
+		var tempClass = courses[tempLang]
+		setDefaultVal("G100")
+	}, [selectedLanguage])
+		*/
 	return (
 		<>
 			<FormBox>
@@ -113,7 +126,6 @@ function ReservationForm({
 						label=""
 						title=""
 						defaultValue={languages[0].value ?? null}
-						autoFocusIfEmpty
 						variant="outlined"
 						// disabled={disabled}
 						size="small"
@@ -125,6 +137,8 @@ function ReservationForm({
 							console.log("changed langauge:", e.target.value);
 							setSelectedLanguage(e.target.value);
 							getAvailability(e.target.value);
+							console.log("trying to change defVal", courses[e.target.value][0])
+							setCourseVal(courses[e.target.value][0])
 						}}
 					>
 						{languages.map((option, index) => (
@@ -140,8 +154,8 @@ function ReservationForm({
 						name="course"
 						label=""
 						title=""
-						defaultValue={null}
-						autoFocusIfEmpty
+						defaultValue={courseVal}
+						value = {courseVal}
 						variant="outlined"
 						classes={styles.textTest}
 						size="small"
@@ -151,6 +165,7 @@ function ReservationForm({
 						onChange={(e) => {
 							console.log("changed the course: ", e.target.value);
 							setSelectedCourse(e.target.value);
+							setCourseVal(e.target.value)
 						}}
 					>
 						{selectedLanguage &&

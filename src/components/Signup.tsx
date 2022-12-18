@@ -22,9 +22,10 @@ function Home() {
 //    const [goOnWaitlist, setGoOnWaitlist] = useState(false)
 
     //handler for submitting the form
-    const handleSubmit = (evt) => {
-        evt.preventDefault();
-        submitRes();
+    const handleSubmit = () => {
+        console.log("hangleSubmit")
+       // evt.preventDefault();
+        //submitRes();
         // alert(
         //   `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
         // );
@@ -76,6 +77,12 @@ function Home() {
             },
         });
         const data = await response.json();
+       // handleSubmit();
+       Swal.fire(
+  'Good job!',
+  'You clicked the button!',
+  'success'
+)
         console.log(data);
     };
 
