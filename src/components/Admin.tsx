@@ -21,6 +21,7 @@ function Admin() {
     );
     const [currentLanguage, setCurrentLanguage] = useState("");
     const { register, handleSubmit, watch, control } = useForm({});
+    const [avail, setAvail] = useState({})
 
     const language = watch("language");
 
@@ -107,7 +108,7 @@ function Admin() {
             </div>
             <div className={styles.CalHolder}>
                 <div className={styles.Cal}>
-                    <Calender onChange={changeFunction} value={selectedDate} />
+                    <Calender onChange={changeFunction} value={selectedDate} availability = {avail} />
                 </div>
             </div>
             <div>
@@ -120,6 +121,7 @@ function Admin() {
                                     <th>Email</th>
                                     <th>Language</th>
                                     <th>Date</th>
+                                    <th>Waitlist</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,6 +133,7 @@ function Admin() {
                                         <td>{res.email}</td>
                                         <td>{res.language}</td>
                                         <td>{res.date}</td>
+                                        <td>{res.on_waitlist}</td>
                                     </tr>
                                 ))}
                             </tbody>

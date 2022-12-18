@@ -19,6 +19,7 @@ function Home() {
     const [firstnameINPUT, onFirstnameCHANGE] = useState("");
     const [lastnameINPUT, onLastnameCHANGE] = useState("");
     const [availabilitiy, setavailabilitiy] = useState("");
+//    const [goOnWaitlist, setGoOnWaitlist] = useState(false)
 
     //handler for submitting the form
     const handleSubmit = (evt) => {
@@ -47,11 +48,12 @@ function Home() {
         lname,
         email,
         language,
-        resDate,
         course,
         id,
+        resDate,
         type,
         isCancel,
+        on_waitlist,
         attended
     ) => {
         const response = await fetch("/api/makeRes", {
@@ -66,7 +68,7 @@ function Home() {
                 resDate: resDate,
                 type: "student",
                 is_cancelled: false,
-                on_waitlist: false,
+                on_waitlist: on_waitlist,
                 attended: false,
             }),
             headers: {

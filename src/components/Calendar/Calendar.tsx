@@ -15,6 +15,10 @@ interface CalendarProps {
 }
 
 function Calender({ onChange, value, disabled, availability }: CalendarProps) {
+	const today = new Date();
+	const minDate = today;
+	const maxDate = addDays(today, 30);
+
 	console.log("in calender: got: ", availability);
 	var newAvail = {};
 	if (availability != null && availability?.data != null) {
@@ -32,11 +36,23 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 			availability
 		);
 		 */
+	} else {
+		var nextDay = new Date(today);
+		for (var i = 0; i < 30; i++) {
+			nextDay.setDate(today.getDate() + i);
+			
+			const tempDate = new Date(
+				nextDay.toISOString().slice(5, 7) +
+					"-" +
+					nextDay.toISOString().slice(8, 10) +
+					"-" +
+					nextDay.toISOString().slice(0, 4)
+			);
+	
+			newAvail[tempDate.toISOString()] = "available";
+		}
+		console.log("availabiltiy was null, new newAvail is", newAvail);
 	}
-
-	const today = new Date();
-	const minDate = today;
-	const maxDate = addDays(today, 30);
 
 	//this is because we need to change from Year-Month-Day to Month-Day-Year (https://stackoverflow.com/questions/7556591/is-the-javascript-date-object-always-one-day-off)
 	const newDate = new Date(
@@ -216,7 +232,7 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 						view,
 					});
 					//}
-//					console.log("what is hidden?", hidden);
+					//					console.log("what is hidden?", hidden);
 					return <AvailabilityIndicator availability={hidden} />;
 				}}
 			/>
