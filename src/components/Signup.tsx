@@ -20,30 +20,8 @@ function Home() {
 	const [lastnameINPUT, onLastnameCHANGE] = useState("");
 	const [availabilitiy, setavailabilitiy] = useState("");
 	//    const [goOnWaitlist, setGoOnWaitlist] = useState(false)
-
-	//handler for submitting the form
-	const handleSubmit = () => {
-		console.log("hangleSubmit");
-		// evt.preventDefault();
-		//submitRes();
-		// alert(
-		//   `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
-		// );
-
-		Swal.fire({
-			title: "Thank you for your submittion!",
-			text: `You have registered for ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.label.toString()}`,
-			// This app is intended to be used as a platform to calculate "who pays who what". This app was inspired by watching family members struggle to calculate the amount of $ owed after family vacations.
-			showClass: {
-				popup: "animate__animated animate__fadeInDown",
-			},
-			hideClass: {
-				popup: "animate__animated animate__fadeOutUp",
-			},
-		});
-	};
-
-	//to submit a book into the database
+	
+	//official submitter
 	const submitRes = async (
 		fname,
 		lname,
@@ -77,9 +55,6 @@ function Home() {
 			},
 		});
 		const data = await response.json();
-		// handleSubmit();
-		console.log("sweetAlert trigger please")
-		Swal.fire("Good job!", "You clicked the button!", "success");
 		console.log(data);
 	};
 
