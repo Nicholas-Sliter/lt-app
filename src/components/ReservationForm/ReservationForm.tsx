@@ -34,7 +34,26 @@ interface ReservationFormProps {
 	makeReservation: any;
 	getAvail: any;
 }
+const submitMessage = (firstnameINPUT, lastnameINPUT, course) => {
+	console.log("hangleSubmit");
+	// evt.preventDefault();
+	//submitRes();
+	// alert(
+	//   `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
+	// );
 
+	Swal.fire({
+		title: "Thank you for your submittion!",
+		text: `You have registered for ${firstnameINPUT} and ${lastnameINPUT} , \n Course = ${course}`,
+		// This app is intended to be used as a platform to calculate "who pays who what". This app was inspired by watching family members struggle to calculate the amount of $ owed after family vacations.
+		showClass: {
+			popup: "animate__animated animate__fadeInDown",
+		},
+		hideClass: {
+			popup: "animate__animated animate__fadeOutUp",
+		},
+	});
+};
 function ReservationForm({
 	formData,
 	getAvail,
@@ -55,7 +74,7 @@ function ReservationForm({
 	const [selectedLanguage, setSelectedLanguage] = useState(
 		languages[0].value
 	);
-	const [selectedCourse, setSelectedCourse] = useState();
+//	const [selectedCourse, setSelectedCourse] = useState();
 	const [selectedDate, setSelectedDate] = useState(
 		new Date().toISOString().split("T")[0]
 	);
@@ -63,7 +82,7 @@ function ReservationForm({
 	const [lastName, setLastName] = useState();
 	const [email, setEmail] = useState();
 	const [ID, setID] = useState();
-	const [courseVal, setCourseVal] = useState(courses['Spanish'][0]);
+	const [courseVal, setCourseVal] = useState(courses["Spanish"][0]);
 
 	const catchChange = async (curLang: string) => {
 		console.log("language change");
@@ -71,6 +90,7 @@ function ReservationForm({
 
 	const coursesObj = courses;
 	const submitButton = (e) => {
+		submitMessage(firstName,lastName,courseVal)
 		console.log(
 			"submitted with:",
 			firstName,
@@ -78,7 +98,7 @@ function ReservationForm({
 			email,
 			selectedLanguage.toLowerCase(),
 			selectedDate,
-			selectedCourse,
+			courseVal,
 			ID
 		);
 		makeReservation(
@@ -86,16 +106,16 @@ function ReservationForm({
 			lastName,
 			email,
 			selectedLanguage.toLowerCase(),
-			selectedCourse,
+			courseVal,
 			ID,
 			selectedDate,
 			"student",
 			false,
-            currentDateAvail,
+			currentDateAvail,
 			false
 		);
-		
-		getAvailability(selectedLanguage)
+
+		getAvailability(selectedLanguage);
 	};
 
 	const getAvailability = async (newLanguage) => {
@@ -106,9 +126,9 @@ function ReservationForm({
 	};
 
 	useEffect(() => {
-		getAvailability("spanish")
-	}, [])
-		/*
+		getAvailability("spanish");
+	}, []);
+	/*
 	useEffect(() => {
 		var tempLang = selectedLanguage;
 		//tempLang[0] = tempLang[0].toUpperCase() 
@@ -137,8 +157,11 @@ function ReservationForm({
 							console.log("changed langauge:", e.target.value);
 							setSelectedLanguage(e.target.value);
 							getAvailability(e.target.value);
-							console.log("trying to change defVal", courses[e.target.value][0])
-							setCourseVal(courses[e.target.value][0])
+							console.log(
+								"trying to change defVal",
+								courses[e.target.value][0]
+							);
+							setCourseVal(courses[e.target.value][0]);
 						}}
 					>
 						{languages.map((option, index) => (
@@ -155,7 +178,7 @@ function ReservationForm({
 						label=""
 						title=""
 						defaultValue={courseVal}
-						value = {courseVal}
+						value={courseVal}
 						variant="outlined"
 						classes={styles.textTest}
 						size="small"
@@ -164,8 +187,8 @@ function ReservationForm({
 						select
 						onChange={(e) => {
 							console.log("changed the course: ", e.target.value);
-							setSelectedCourse(e.target.value);
-							setCourseVal(e.target.value)
+							//setSelectedCourse(e.target.value);
+							setCourseVal(e.target.value);
 						}}
 					>
 						{selectedLanguage &&
@@ -189,9 +212,11 @@ function ReservationForm({
 						"avail test, ",
 						avail.data?.[e.toISOString().split("T")[0]]
 					);
-                    setCurrentDateAvail(avail.data?.[e.toISOString().split("T")[0]])
+					setCurrentDateAvail(
+						avail.data?.[e.toISOString().split("T")[0]]
+					);
 					//if (
-						//avail.data?.[e.toISOString().split("T")[0]] == "waitlist" 
+					//avail.data?.[e.toISOString().split("T")[0]] == "waitlist"
 					//) {
 					//	setCurrentDateAvail("waitlist");
 					//}
