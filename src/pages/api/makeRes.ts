@@ -5,7 +5,7 @@ import { getDateInfo, makeRes } from "../../lib/backend/database-utils";
 type Data = {
 	name: string;
 };
-
+//api handler
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 	if (req.method == "POST") {
 		const firstName = req.body.firstName;
