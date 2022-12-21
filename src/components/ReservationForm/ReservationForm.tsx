@@ -39,11 +39,16 @@ interface ReservationFormProps {
     languages: Language[],
     courses: Course[]
 }
-
+// const submitMessage = (firstnameINPUT, lastnameINPUT, course) => {
+//     console.log("hangleSubmit");
+//     // evt.preventDefault();
+//     //submitRes();
+//     // alert(
+//     //   `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
+//     // );
+// }
 
 function ReservationForm({
-    formData,
-    makeReservation,
     languages,
     courses
 }: ReservationFormProps) {
@@ -205,3 +210,4 @@ function ReservationForm({
 }
 
 export default ReservationForm;
+

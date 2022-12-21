@@ -15,7 +15,11 @@ import knex from "./knex";
  *
  */
 export async function getDateInfo(datePassed, languagePassed): Promise<any> {
-    console.log("in getdate info in database Utils", datePassed, languagePassed);
+    console.log(
+        "in getdate info in database Utils",
+        datePassed,
+        languagePassed
+    );
     const review = await knex("reservations").where({
         date: datePassed,
         language: languagePassed.toLowerCase(),
@@ -88,10 +92,44 @@ export async function getLanguages(): Promise<Language[]> {
     const languages = await knex("languages")
         .select(["name"]);
 
-    if (!languages) {
-        return [];
-    }
     return languages;
+}
+
+
+/**
+ * function to update the status of a persons reservation
+ *
+ *
+ */
+export async function changeStatus(
+    person: string,
+    language: string,
+    date: string
+) {
+    const current = await knex("reservations").where({
+        language: language.toLowerCase(),
+        email: person,
+        date: date,
+    });
+    console.log("current got:", await current);
+    var updated;
+    if ((await current[0].on_waitlist) == 1) {
+        updated = await knex("reservations").update({ on_waitlist: 0 }).where({
+            language: language.toLowerCase(),
+            email: person,
+            date: date,
+        });
+        console.log("updated:", await updated)
+    } else {
+        updated = await knex("reservations").update({ attended_at: date }).where({
+
+            language: language.toLowerCase(),
+            email: person,
+            date: date,
+        })
+        console.log("updated:", await updated)
+    }
+    return updated;
 }
 
 
