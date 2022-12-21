@@ -13,7 +13,10 @@ interface TextInputProps {
         max?: number;
         minLength?: number;
         maxLength?: number;
-        pattern?: string;
+        pattern?: {
+            value: RegExp;
+            message: string;
+        };
         validate?: Function;
     };
     component?: Component;

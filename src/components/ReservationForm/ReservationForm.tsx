@@ -173,7 +173,13 @@ function ReservationForm({
                     label="Email"
                     key="email"
                     register={register}
-                    validation={{ required: "Please enter your email" }}
+                    validation={{
+                        required: "Please enter your email",
+                        pattern: {
+                            value: /@middlebury.edu$/,
+                            message: "Please enter a Middlebury email address"
+                        },
+                    }}
                 />
                 <TextInput
                     name="middlebury_id"
@@ -182,7 +188,10 @@ function ReservationForm({
                     register={register}
                     validation={{
                         required: "Please enter your Middlebury ID.",
-                        pattern: "/^[0-9]{8}$/",
+                        pattern: {
+                            value: /^(00)?[0-9]{6}$/,
+                            message: "Please enter a valid Middlebury ID."
+                        },
                     }}
                 />
                 {/* <Checkbox defaultChecked={false} title={"Save personal information"} /> */}
