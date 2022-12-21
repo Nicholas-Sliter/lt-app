@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import TextInput from "../Widgets/TextInput";
 import styles from "./ReservationForm.module.scss";
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import FormBox from "../FormBox";
 import Calendar from "../Calendar";
 import { debounceLeading, getNextWeekday, toTitleCase } from "../../lib/frontend/utils";
@@ -13,6 +13,7 @@ import { Availability } from "../../types/Availability";
 import API_Adaptor from "../../lib/frontend/adaptor";
 import useAvailability from "../../hooks/useAvailability";
 import { stringFormattedDate } from "../../lib/common/utils";
+import SnackAlert from "../SnackAlert";
 
 interface ReservationRequest {
     date: Date;
@@ -44,6 +45,13 @@ interface ReservationFormProps {
 //     // );
 // }
 
+
+interface RegistrationInfo {
+    submitted: boolean;
+    error: boolean;
+    message: string;
+}
+
 function ReservationForm({
     languages,
     courses
@@ -52,6 +60,14 @@ function ReservationForm({
     // const defaultValues = {
     //     date: formData?.date ?? getNextWeekday(new Date())
     // };
+
+    const [registrationInfo, setRegistrationInfo] = useState<RegistrationInfo>({
+        submitted: false,
+        error: false,
+        message: ""
+    });
+
+    const [showSnackbar, setShowSnackbar] = useState(false);
 
     const { register, handleSubmit, watch, control } = useForm({
         shouldUseNativeValidation: true,
@@ -75,11 +91,9 @@ function ReservationForm({
 
 
     const todayISO = stringFormattedDate(new Date());
-    console.log("todayISO:", todayISO);
     const WINDOW_LENGTH = 16;
     const availability = useAvailability(todayISO, language, WINDOW_LENGTH);
 
-    console.log("date:", date);
     const dateAvailability = availability[date] ?? "unavailable";
 
     const disableCalendar = !language || !course;
@@ -130,7 +144,6 @@ function ReservationForm({
                     return (
                         <Calendar
                             onChange={(e) => {
-                                console.log("e:", e.toISOString());
                                 field.onChange(e)
                             }}
                             value={field.value}
@@ -139,20 +152,6 @@ function ReservationForm({
                         />)
                 }}
             />
-            {/* <Calendar
-                value={date}
-                availability={undefined}
-                onChange={(e) => {
-                    console.log("e:", e.toISOString());
-                    // setSelectedDate(e.toISOString().split("T")[0]);
-                    // setCurrentDateAvail(avail.data?.[e.toISOString().split("T")[0]])
-                    //if (
-                    //avail.data?.[e.toISOString().split("T")[0]] == "waitlist" 
-                    //) {
-                    //	setCurrentDateAvail("waitlist");
-                    //}
-                }}
-            /> */}
             <FormBox>
 
                 <TextInput
@@ -195,12 +194,26 @@ function ReservationForm({
                         debounceLeading(
                             handleSubmit(() => {
                                 console.log("submitted with:", firstName, lastName, email, language.toLowerCase(), date, course, middlebury_id);
+                                setRegistrationInfo({
+                                    submitted: true,
+                                    error: false,
+                                    message: "Reserved successfully!"
+                                });
+                                setShowSnackbar(true);
+
                             }), 1000)}
                     disabled={disableSubmit}
                 >
                     {submitText}
                 </Button>
             </FormBox>
+            <SnackAlert
+                open={showSnackbar}
+                onClose={() => setShowSnackbar(false)}
+                severity={registrationInfo.error ? "error" : "success"}
+                message={registrationInfo.message}
+            />
+
         </>
     );
 }
