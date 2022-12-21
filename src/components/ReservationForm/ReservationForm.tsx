@@ -202,7 +202,6 @@ function ReservationForm({
                     onClick={
                         debounceLeading(
                             handleSubmit(async () => {
-                                console.log("submitted with:", firstName, lastName, email, language.toLowerCase(), date, course, middlebury_id);
                                 const { error, message } = await API_Adaptor.createReservation({
                                     first_name: firstName,
                                     last_name: lastName,
