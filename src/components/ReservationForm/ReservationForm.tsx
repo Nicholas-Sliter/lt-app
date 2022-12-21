@@ -36,15 +36,6 @@ interface ReservationFormProps {
     languages: Language[],
     courses: Course[]
 }
-// const submitMessage = (firstnameINPUT, lastnameINPUT, course) => {
-//     console.log("hangleSubmit");
-//     // evt.preventDefault();
-//     //submitRes();
-//     // alert(
-//     //   `Name = ${firstnameINPUT.toString()} and ${lastnameINPUT.toString()} , \n Course = ${course.toString()}`
-//     // );
-// }
-
 
 interface RegistrationInfo {
     submitted: boolean;
@@ -56,10 +47,6 @@ function ReservationForm({
     languages,
     courses
 }: ReservationFormProps) {
-
-    // const defaultValues = {
-    //     date: formData?.date ?? getNextWeekday(new Date())
-    // };
 
     const [registrationInfo, setRegistrationInfo] = useState<RegistrationInfo>({
         submitted: false,

@@ -10,7 +10,7 @@ interface HomeProps {
 }
 
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
 
   const res = await Promise.all([getLanguages(), getCourses()]);
   const languages = res[0];
