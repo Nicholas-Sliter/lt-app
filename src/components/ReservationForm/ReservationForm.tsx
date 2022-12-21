@@ -192,12 +192,22 @@ function ReservationForm({
                     variant="contained"
                     onClick={
                         debounceLeading(
-                            handleSubmit(() => {
+                            handleSubmit(async () => {
                                 console.log("submitted with:", firstName, lastName, email, language.toLowerCase(), date, course, middlebury_id);
+                                const { error, message } = await API_Adaptor.createReservation({
+                                    first_name: firstName,
+                                    last_name: lastName,
+                                    email: email,
+                                    language: language.toLowerCase(),
+                                    date: date,
+                                    course: course,
+                                    middlebury_id: middlebury_id
+                                })
+
                                 setRegistrationInfo({
                                     submitted: true,
-                                    error: false,
-                                    message: "Reserved successfully!"
+                                    error,
+                                    message: message
                                 });
                                 setShowSnackbar(true);
 

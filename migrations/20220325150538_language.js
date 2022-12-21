@@ -8,8 +8,8 @@ exports.up = function (knex, Promise) {
       table.integer("tablesOf8").defaultTo(0).notNullable();
     })
     .createTable("courses", (table) => {
-      table.string("name").primary();
-      table.string("code").notNullable();
+      table.string("code").primary();
+      table.string("name").notNullable();
       table.string("language").notNullable();
       table.foreign("language").references("languages.name");
     })

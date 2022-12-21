@@ -24,6 +24,13 @@ export async function getServerSideProps(context) {
   };
 }
 
+/*
+
+
+TODO: signup should just be this file instead of in a separate component
+
+*/
+
 
 function Home({ languages, courses }: HomeProps) {
 

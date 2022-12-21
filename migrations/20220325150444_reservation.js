@@ -1,4 +1,3 @@
-const { languages } = require("../data/constants");
 
 exports.up = function (knex, Promise) {
   return knex.schema
@@ -10,7 +9,11 @@ exports.up = function (knex, Promise) {
       table.string("email").notNullable();
       table.string("middlebury_id").notNullable();
       table.string("created_at").notNullable();
-      table.enum("language", languages).notNullable();
+      table.string("language").notNullable();
+      table.foreign("language").references("languages.name");
+      table.string("course").notNullable();
+      table.foreign("course").references("courses.code");
+
       table
         .enum("type", ["student", "ta", "faculty", "guest"])
         .defaultTo("student")

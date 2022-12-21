@@ -3,6 +3,7 @@
  */
 
 import { Availability } from "../../types/Availability";
+import Reservation from "../../types/Reservation";
 import Course from "../../types/Course";
 import Language from "../../types/Language";
 import { stringFormattedDate } from "../common/utils";
@@ -183,4 +184,55 @@ export async function getDateAvailabilities(dates: Date[], language: string): Pr
     }
 
     return availabilities;
+}
+
+
+export async function getReservation(email: string, dateString: string): Promise<any> {
+    const reservation = await knex("reservations")
+        .select(["email", "date", "language"])
+        .where({ email, date: dateString })
+        .first();
+
+    return reservation;
+}
+
+export async function getReservations(emails: string[], dates: Date[], languages: string[]): Promise<any> {
+    const reservations = await knex("reservations")
+        .select(["email", "date", "language"])
+        .whereIn("email", emails)
+        .whereIn("date", dates.map(date => stringFormattedDate(date)))
+        .whereIn("language", languages);
+
+
+    return reservations;
+}
+
+
+export async function createReservation(reservation: Reservation) {
+
+    const res = await knex("reservations").insert({
+        first_name: reservation.first_name,
+        last_name: reservation.last_name,
+        email: reservation.email,
+        middlebury_ID: reservation.middlebury_id,
+        language: reservation.language,
+        course: reservation.course,
+        type: reservation.type,
+        date: reservation.date,
+        is_cancelled: reservation.is_cancelled,
+        on_waitlist: reservation.on_waitlist,
+        attended: reservation.attended,
+        created_at: reservation.created_at,
+    })
+        .returning("*");
+
+    if (!res) {
+        return null;
+    }
+
+    return res[0].id;
+
+
+
+
 }

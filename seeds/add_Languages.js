@@ -19,6 +19,6 @@ exports.seed = async function (knex) {
   ]);
   await knex('reservations').del();
   await knex('reservations').insert([
-    { id: "3", first_name: "a", last_name: "b", email: "a", middlebury_id: 0, created_at: "no", language: "spanish", date: "2022-10-24T04:00:00.000Z" }
+    { id: "3", first_name: "a", last_name: "b", email: "a", course: "SPAN101", middlebury_id: 0, created_at: "no", language: "spanish", date: "2022-10-24T04:00:00.000Z" }
   ]);
 };

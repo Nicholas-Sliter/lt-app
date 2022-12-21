@@ -1,4 +1,5 @@
 import { Availability } from "../../types/Availability";
+import Reservation from "../../types/Reservation";
 
 
 abstract class API_Base {
@@ -65,6 +66,11 @@ abstract class API_Adaptor extends API_Base {
             date: date,
             length: length
         });
+    }
+
+    public static createReservation(data: Reservation): Promise<any> {
+        return API_Adaptor.__post<any>("/api/reservations", data);
+
     }
 
 
