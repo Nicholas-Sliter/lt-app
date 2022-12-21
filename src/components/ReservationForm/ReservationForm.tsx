@@ -1,259 +1,207 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import TextInput from "../Widgets/TextInput";
 import styles from "./ReservationForm.module.scss";
-import { Box, Button, Checkbox, MenuItem, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import FormBox from "../FormBox";
 import Calendar from "../Calendar";
-import { getNextWeekday } from "../../lib/frontend/utils";
-import useCourses from "../../hooks/useCourses";
-import useLanguages from "../../hooks/useLanguages";
-import { courses, languages } from "../../../data/expConst";
+import { debounceLeading, getNextWeekday, toTitleCase } from "../../lib/frontend/utils";
+import Course from "../../types/Course";
+import Language from "../../types/Language";
+import Checkbox from "@mui/material/Checkbox";
+import { Availability } from "../../types/Availability";
+import API_Adaptor from "../../lib/frontend/adaptor";
+import useAvailability from "../../hooks/useAvailability";
+import { stringFormattedDate } from "../../lib/common/utils";
 
 interface ReservationRequest {
-	date: Date;
-	first_name?: string;
-	last_name?: string;
-	email?: string;
-	language?: string;
-	middlebury_id?: string;
-	course?: string;
+    date: Date;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    language?: string;
+    middlebury_id?: string;
+    course?: string;
 }
 
 /* Contains any preset values */
 interface FormData extends ReservationRequest {
-	date: Date;
-	language: string;
-	courses?: string[];
+    date: Date;
+    language: string;
+    courses?: string[];
 }
 
 interface ReservationFormProps {
-	onSubmit: any;
-	formData: FormData;
-	submitFunction: any;
-	makeReservation: any;
-	getAvail: any;
+    onSubmit: any;
+    formData: FormData;
+    submitFunction: any;
+    makeReservation: any;
+    languages: Language[],
+    courses: Course[]
 }
 
+
 function ReservationForm({
-	formData,
-	getAvail,
-	makeReservation,
+    formData,
+    makeReservation,
+    languages,
+    courses
 }: ReservationFormProps) {
-	const [currentLang, setCurrentLang] = useState(null);
 
-	const defaultValues = {
-		date: formData?.date ?? getNextWeekday(new Date()),
-		language: null, //formData?.language ?? "English",
-		courses: formData?.courses ?? [],
-	};
+    // const defaultValues = {
+    //     date: formData?.date ?? getNextWeekday(new Date())
+    // };
 
-	const { register, handleSubmit, watch, control } = useForm({
-		shouldUseNativeValidation: true,
-		defaultValues,
-	});
-	const [avail, setAvail] = useState({});
-	const [currentDateAvail, setCurrentDateAvail] = useState("available");
-	const [selectedLanguage, setSelectedLanguage] = useState(
-		languages[0].value
-	);
-	const [selectedCourse, setSelectedCourse] = useState();
-	const [selectedDate, setSelectedDate] = useState(
-		new Date().toISOString().split("T")[0]
-	);
-	const [firstName, setFirstName] = useState();
-	const [lastName, setLastName] = useState();
-	const [email, setEmail] = useState();
-	const [ID, setID] = useState();
+    const { register, handleSubmit, watch, control } = useForm({
+        shouldUseNativeValidation: true,
+    });
 
-	const catchChange = async (curLang: string) => {
-		console.log("language change");
-	};
+    const language: string = useWatch({
+        name: "language",
+        control,
+        defaultValue: ''
+    });
+    const course: string = useWatch({
+        name: "course",
+        control,
+        defaultValue: ''
+    });
+    const date: string = stringFormattedDate(watch("date"));
+    const firstName: string = watch("first_name");
+    const lastName: string = watch("last_name");
+    const email: string = watch("email");
+    const middlebury_id: string = watch("middlebury_id");
 
-	const coursesObj = courses;
-	const submitButton = (e) => {
-		console.log(
-			"submitted with:",
-			firstName,
-			lastName,
-			email,
-			selectedLanguage.toLowerCase(),
-			selectedDate,
-			selectedCourse,
-			ID
-		);
-		makeReservation(
-			firstName,
-			lastName,
-			email,
-			selectedLanguage.toLowerCase(),
-			selectedCourse,
-			ID,
-			selectedDate,
-			"student",
-			false,
-            currentDateAvail,
-			false
-		);
-	};
 
-	const getAvailability = async (newLanguage) => {
-		console.log("newLanguage");
-		var returnedAvail = await getAvail(newLanguage);
-		console.log("returns New avail:", await returnedAvail);
-		setAvail(await returnedAvail);
-	};
-	return (
-		<>
-			<FormBox>
-				<div className={styles.language}>
-					<div className={styles.courseTitle}>Langauge:</div>
-					<TextField
-						name="language"
-						label=""
-						title=""
-						defaultValue={languages[0].value ?? null}
-						autoFocusIfEmpty
-						variant="outlined"
-						// disabled={disabled}
-						size="small"
-						select
-						// options={languages}
-						// register={register}
-						validation={{ required: "Please select a language" }}
-						onChange={(e) => {
-							console.log("changed langauge:", e.target.value);
-							setSelectedLanguage(e.target.value);
-							getAvailability(e.target.value);
-						}}
-					>
-						{languages.map((option, index) => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-						))}
-					</TextField>
-				</div>
-				<div className={styles.courseName}>
-					<div className={styles.courseTitle}>Course</div>
-					<TextField
-						name="course"
-						label=""
-						title=""
-						defaultValue={null}
-						autoFocusIfEmpty
-						variant="outlined"
-						classes={styles.textTest}
-						size="small"
-						placeholder="P"
-						fullWidth
-						select
-						onChange={(e) => {
-							console.log("changed the course: ", e.target.value);
-							setSelectedCourse(e.target.value);
-						}}
-					>
-						{selectedLanguage &&
-							courses[selectedLanguage].map((option, index) => (
-								<MenuItem key={index} value={option}>
-									{option}
-								</MenuItem>
-							))}
-					</TextField>
-				</div>
-			</FormBox>
-			<Calendar
-				value={selectedDate}
-				availability={avail}
-				language={selectedLanguage}
-				onChange={(e) => {
-					console.log("e:", e.toISOString());
-					setSelectedDate(e.toISOString().split("T")[0]);
-					console.log("availability: ", avail);
-					console.log(
-						"avail test, ",
-						avail.data?.[e.toISOString().split("T")[0]]
-					);
-                    setCurrentDateAvail(avail.data?.[e.toISOString().split("T")[0]])
-					//if (
-						//avail.data?.[e.toISOString().split("T")[0]] == "waitlist" 
-					//) {
-					//	setCurrentDateAvail("waitlist");
-					//}
-				}}
-			/>
-			<FormBox>
-				<div className={styles.InputContainer}>
-					<TextField
-						name="first_name"
-						label="First Name"
-						size="small"
-						onChange={(e) => {
-							// console.log("first name: ", e);
-							setFirstName(e.target.value);
-						}}
-						validation={{
-							required: "Please enter your first name",
-						}}
-					/>
-				</div>
+    const todayISO = stringFormattedDate(new Date());
+    console.log("todayISO:", todayISO);
+    const WINDOW_LENGTH = 16;
+    const availability = useAvailability(todayISO, language, WINDOW_LENGTH);
 
-				<div className={styles.InputContainer}>
-					<TextField
-						name="last_name"
-						label="Last Name"
-						size="small"
-						validation={{ required: "Please enter your last name" }}
-						onChange={(e) => {
-							setLastName(e.target.value);
-						}}
-					/>
-				</div>
-				<div className={styles.InputContainer}>
-					<TextField
-						name="email"
-						label="Email"
-						size="small"
-						onChange={(e) => {
-							setEmail(e.target.value);
-						}}
-						// register={register}
-						validation={{ required: "Please enter your email" }}
-					/>
-				</div>
-				<div className={styles.InputContainer}>
-					<TextField
-						name="middlebury_id"
-						label="Middlebury ID"
-						title="Middlebury ID"
-						size="small"
-						onChange={(e) => {
-							setID(e.target.value);
-						}}
-						validation={{
-							required: "Please enter your Middlebury ID.",
-							pattern: "/^[0-9]{8}$/",
-						}}
-					/>
-				</div>
-				{/* <Checkbox defaultChecked={false} title={"Save personal information"} /> */}
-			</FormBox>
-			<FormBox invisible>
-				<Button
-					variant="contained"
-					// onClick={handleSubmit(onSubmitHandler)}
-					onClick={submitButton}
-					// disabled={disabled}
-				>
-					{currentDateAvail == "available"
-						? "Reserve"
-						: currentDateAvail == "waitlist"
-						? "Join Waitlist"
-						: "Reserve"}
-				</Button>
-			</FormBox>
-		</>
-	);
+    console.log("date:", date);
+    const dateAvailability = availability[date] ?? "unavailable";
+
+    const disableCalendar = !language || !course;
+    const disableSubmit = !firstName || !lastName || !email || !middlebury_id || !language || !course; // || !date
+
+    let submitText = ""
+    if (disableCalendar || !date) {
+        submitText = "Select Date";
+    }
+    else if (dateAvailability == "available") {
+        submitText = "Reserve";
+    } else if (dateAvailability == "unavailable") {
+        submitText = "Date Unavailable";
+    } else if (dateAvailability == "waitlist") {
+        submitText = "Join Waitlist";
+    }
+
+
+
+    return (
+        <>
+            <FormBox>
+                <TextInput
+                    name="language"
+                    label="Language"
+                    title="Language"
+                    autoFocusIfEmpty
+                    select
+                    options={languages.map((language) => { return { value: language.name, label: toTitleCase(language.name) } })}
+
+                    register={register}
+                    validation={{ required: "Please select a language" }} />
+                <TextInput
+                    name="course"
+                    label="Course"
+                    title="Course"
+                    select
+                    options={courses.filter((course) => course.language == language).map((course) => { return { value: course.code, label: course.name } })}
+                    disabled={!language}
+                    register={register}
+                />
+            </FormBox>
+            <Controller
+                name="date"
+                control={control}
+                defaultValue={getNextWeekday(new Date())}
+                render={({ field }) => {
+                    return (
+                        <Calendar
+                            onChange={(e) => {
+                                console.log("e:", e.toISOString());
+                                field.onChange(e)
+                            }}
+                            value={field.value}
+                            disabled={disableCalendar}
+                            availability={availability}
+                        />)
+                }}
+            />
+            {/* <Calendar
+                value={date}
+                availability={undefined}
+                onChange={(e) => {
+                    console.log("e:", e.toISOString());
+                    // setSelectedDate(e.toISOString().split("T")[0]);
+                    // setCurrentDateAvail(avail.data?.[e.toISOString().split("T")[0]])
+                    //if (
+                    //avail.data?.[e.toISOString().split("T")[0]] == "waitlist" 
+                    //) {
+                    //	setCurrentDateAvail("waitlist");
+                    //}
+                }}
+            /> */}
+            <FormBox>
+
+                <TextInput
+                    name="first_name"
+                    label="First Name"
+                    key="first_name"
+                    register={register}
+                    validation={{ required: "Please enter your first name" }}
+                />
+                <TextInput
+                    name="last_name"
+                    label="Last Name"
+                    key="last_name"
+                    register={register}
+                    validation={{ required: "Please enter your last name" }}
+                />
+                <TextInput
+                    name="email"
+                    label="Email"
+                    key="email"
+                    register={register}
+                    validation={{ required: "Please enter your email" }}
+                />
+                <TextInput
+                    name="middlebury_id"
+                    label="Middlebury ID"
+                    key="middlebury_id"
+                    register={register}
+                    validation={{
+                        required: "Please enter your Middlebury ID.",
+                        pattern: "/^[0-9]{8}$/",
+                    }}
+                />
+                {/* <Checkbox defaultChecked={false} title={"Save personal information"} /> */}
+            </FormBox>
+            <FormBox invisible>
+                <Button
+                    variant="contained"
+                    onClick={
+                        debounceLeading(
+                            handleSubmit(() => {
+                                console.log("submitted with:", firstName, lastName, email, language.toLowerCase(), date, course, middlebury_id);
+                            }), 1000)}
+                    disabled={disableSubmit}
+                >
+                    {submitText}
+                </Button>
+            </FormBox>
+        </>
+    );
 }
 
 export default ReservationForm;

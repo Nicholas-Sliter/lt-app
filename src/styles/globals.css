@@ -32,6 +32,26 @@ body {
 
 }
 
+.react-calendar__month-view__days>.react-calendar__tile--now,
+.react-calendar__month-view__days>.react-calendar__tile--now:hover {
+  background-color: unset;
+  text-decoration: dashed underline;
+
+}
+
+.react-calendar__month-view__days>.react-calendar__tile--now:hover {
+  background-color: #e6e6e6 !important;
+}
+
+/* Selected tile */
+.react-calendar__month-view__days>.react-calendar__tile--active {
+  color: #ffffff !important;
+  background-color: #006edc !important;
+}
+
+
+
+
 /* Hide weekday labels */
 /* Variant 1 - US calendar */
 .react-calendar__month-view__weekdays__weekday:nth-child(6),

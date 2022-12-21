@@ -2,6 +2,10 @@
  * Backend databse utililty functions
  */
 
+import { Availability } from "../../types/Availability";
+import Course from "../../types/Course";
+import Language from "../../types/Language";
+import { stringFormattedDate } from "../common/utils";
 import knex from "./knex";
 
 /**
@@ -80,11 +84,65 @@ export async function getLanguageInfo(passedLanguage: string): Promise<any> {
     return languagetable;
 }
 
-export async function getLanguages(): Promise<any> {
-    const languages = await knex("languages");
+export async function getLanguages(): Promise<Language[]> {
+    const languages = await knex("languages")
+        .select(["name"]);
 
     if (!languages) {
-        return null;
+        return [];
     }
     return languages;
+}
+
+
+export async function getCourses(): Promise<Course[]> { //Record<string, Course[]>
+    const courses = await knex("courses")
+        .select(["name", "language", "code"]);
+
+    if (!courses) {
+        return [];
+    }
+
+    // const coursesByLanguage: Record<string, Course[]> = {};
+    // for (const course of courses) {
+    //     if (!coursesByLanguage[course.language]) {
+    //         coursesByLanguage[course.language] = [];
+    //     }
+    //     coursesByLanguage[course.language].push(course);
+    // }
+
+    return courses;
+}
+
+
+
+export async function getDateAvailabilities(dates: Date[], language: string): Promise<Availability> {
+    const reservations = await knex("reservations")
+        .select(["date", "language"])
+        .whereIn("date", dates.map(date => date.toISOString()))
+        .andWhere({ language })
+        .groupBy("date", "language")
+        .count("* as count");
+
+    const languageInfo = await knex("languages")
+        .select(["name", "reserved_seats", "tablesOf6", "tablesOf8"])
+        .where({ name: language });
+
+    const availabilities: Availability = {};
+    for (const date of dates) {
+        const dateISOString = stringFormattedDate(date);
+        const reservationCount = +(reservations.find(reservation => reservation.date === dateISOString)?.count ?? 0);
+        const reservedSeats = languageInfo[0].reserved_seats;
+
+        const tablesOf6 = languageInfo[0].tablesOf6;
+        const tablesOf8 = languageInfo[0].tablesOf8;
+
+        const totalSeats = tablesOf6 * 6 + tablesOf8 * 8;
+        const availableSeats = totalSeats - reservedSeats - reservationCount;
+
+        availabilities[dateISOString] = availableSeats > 0 ? "available" : "waitlist";
+
+    }
+
+    return availabilities;
 }

@@ -13,12 +13,12 @@ exports.seed = async function (knex) {
   ]);
   await knex('courses').del();
   await knex('courses').insert([
-    { name: "Spanish 101", code: "SPAN", language: "spanish" },
-    { name: "German 101", code: "GERM", language: "german" },
-    { name: "English 101", code: "ENGL", language: "english" },
+    { name: "Spanish 101", code: "SPAN101", language: "spanish" },
+    { name: "German 101", code: "GERM101", language: "german" },
+    { name: "English 101", code: "ENGL101", language: "english" },
   ]);
   await knex('reservations').del();
   await knex('reservations').insert([
-    { id: "3", first_name: "a", last_name : "b", email: "a", middlebury_id: 0, created_at: "no", language : "spanish", date: "2022-10-24T04:00:00.000Z" }
+    { id: "3", first_name: "a", last_name: "b", email: "a", middlebury_id: 0, created_at: "no", language: "spanish", date: "2022-10-24T04:00:00.000Z" }
   ]);
 };

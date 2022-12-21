@@ -1,3 +1,3 @@
-export default interface Language { 
+export default interface Language {
     name: string;
 }

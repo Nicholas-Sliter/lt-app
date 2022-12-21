@@ -33,7 +33,7 @@
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
-    padding:10px;
+    padding: 10px;
 
     &>div {
         width: 100%;
@@ -50,25 +50,8 @@
     }
 }
 
-.language {
-    margin:10px;
-    display:flex;
-    justifiy-content:center;
-    width:100px;
-    flex-direction:column;
-    align-items:center;
-}
 
-.courseName {
 
-    margin:10px;
-    width:100px;
-    display:flex;
-    justifiy-content:center;
-    flex-direction:column;
-    align-items:center;
-
-}
 .courseTitle {
-    font-size:15px;
+    font-size: 15px;
 }
