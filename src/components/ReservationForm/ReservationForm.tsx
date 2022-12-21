@@ -32,10 +32,6 @@ interface FormData extends ReservationRequest {
 }
 
 interface ReservationFormProps {
-    onSubmit: any;
-    formData: FormData;
-    submitFunction: any;
-    makeReservation: any;
     languages: Language[],
     courses: Course[]
 }
