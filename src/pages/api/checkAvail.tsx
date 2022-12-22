@@ -35,6 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         var returned = await getDateInfo(nextDate.toISOString().split("T")[0], req.body.language.toLowerCase())
         var takenSeats = await returned.length;
         var availible = await max_seats - takenSeats;
+		console.log("available seats:", available)
         //should be avail > 0 = avail, but using 21 to see changes on calender.
         
         if (await availible < 21) {

@@ -97,6 +97,31 @@ export async function getLanguages(): Promise<Language[]> {
 }
 
 
+
+/**
+ * function to delete a persons reservation
+ *
+ *
+ */
+export async function deleteReservation(
+    person: string,
+    language: string,
+    date: string
+) {
+    const current = await knex("reservations").where({
+        language: language.toLowerCase(),
+        email: person,
+        date: date,
+    });
+	var updated;
+	updated = await knex("reservations").where({
+		language: language.toLowerCase(),
+		email: person,
+		date: date,
+	}).del()
+
+    return updated;
+}
 /**
  * function to update the status of a persons reservation
  *
@@ -158,7 +183,7 @@ export async function getCourses(): Promise<Course[]> { //Record<string, Course[
 export async function getDateAvailabilities(dates: Date[], language: string): Promise<Availability> {
     const reservations = await knex("reservations")
         .select(["date", "language"])
-        .whereIn("date", dates.map(date => date.toISOString()))
+        .whereIn("date", dates.map(date => date.toISOString().split("T")[0]))
         .andWhere({ language })
         .groupBy("date", "language")
         .count("* as count");
@@ -167,6 +192,7 @@ export async function getDateAvailabilities(dates: Date[], language: string): Pr
         .select(["name", "reserved_seats", "tablesOf6", "tablesOf8"])
         .where({ name: language });
 
+		console.log("langaugeReservation called with:", dates, ", langages:", language, "reservations: ", reservations)
     const availabilities: Availability = {};
     for (const date of dates) {
         const dateISOString = stringFormattedDate(date);
@@ -179,7 +205,9 @@ export async function getDateAvailabilities(dates: Date[], language: string): Pr
         const totalSeats = tablesOf6 * 6 + tablesOf8 * 8;
         const availableSeats = totalSeats - reservedSeats - reservationCount;
 
-        availabilities[dateISOString] = availableSeats > 0 ? "available" : "waitlist";
+        //availabilities[dateISOString] = availableSeats > 0 ? "available" : "waitlist";
+		console.log("available seats:", availableSeats, "reservation count:", reservationCount, "for date", date)
+        availabilities[dateISOString] = availableSeats > 20 ? "available" : "waitlist";
 
     }
 

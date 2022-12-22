@@ -12,6 +12,7 @@ interface CalendarProps {
 	value: Date;
 	disabled?: boolean;
 	availability: Availability;
+	page: string;
 }
 
 
@@ -21,7 +22,7 @@ function getDateAvailability(date: Date, availability: Availability) {
 
 
 
-function Calender({ onChange, value, disabled, availability }: CalendarProps) {
+function Calender({ onChange, value, disabled, availability, page }: CalendarProps) {
 	const today = new Date();
 	const minDate = getNextWeekday(today);
 	const maxDate = addDays(today, 16);
@@ -56,8 +57,9 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 	};
 	// how we know wether to disable date or not
 	const tileDisabled = (date: Date) => {
-
-
+		if (page == "admin") {
+			return false	
+		}
 		if (disabled) {
 			return true;
 		}
@@ -97,11 +99,13 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 
 	// handles if we can click on a date or not
 	const dateChangeHandler = (date: Date) => {
+		console.log("shit chaged")
+
+		onChange(date);
 		//prevent changing dates to disabled dates
 		if (tileDisabled(date)) {
 			return;
 		}
-		onChange(date);
 	};
 
 	return (
@@ -118,7 +122,7 @@ function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 				//tileDisabled={disableDateHandler}
 				tileClassName={tileClassNameHandler}
 				tileContent={({ date, view }) => {
-
+						
 					if (tileDisabled(date)) {
 						return null;
 					}

@@ -17,8 +17,9 @@ const languages = [
 function Admin() {
 	const [reservations, setReservations] = useState([]);
 	const [selectedDate, setDate] = useState(
+
 		new Date().toISOString().split("T")[0]
-	);
+			);
 	const [currentLanguage, setCurrentLanguage] = useState("");
 	const { register, handleSubmit, watch, control } = useForm({});
 	const [avail, setAvail] = useState({});
@@ -30,7 +31,6 @@ function Admin() {
 	}
 
 	function changeFunction(val) {
-		// {{{
 		console.log(
 			"change function, origional val:",
 			val,
@@ -39,28 +39,23 @@ function Admin() {
 		);
 		// var temp = val.toISOString().split("T")[0];
 		// var temp = new Date(new Date(val).toISOString().split("T")[0]);
-		var temp = new Date(val.toDateString()).toISOString().split("T")[0];
-		console.log("new temp:", temp);
-		setDate(temp);
+	//	var temp = new Date(val.toDateString()).toISOString().split("T")[0];
+	//	console.log("new temp:", temp);
+	//	setDate(temp);
+		var temp = val
+		setDate(temp.toISOString())
 		getReservation(temp, currentLanguage);
 		console.log("value in current language", currentLanguage);
-	} // }}}
+	}
 
 	const getReservation = async (date, language) => {
-		// {{{
-		console.log("new temp in getReservation:", date.split("T")[0]);
-		setDate(date.split("T")[0]);
-		console.log(
-			"submitting getReservation with date",
-			date.split("T")[0]
-			// date.toISOString().split("T")[0]
-		);
-		//for some reason this isnt working!!!!!
+		setDate(date)
+		console.log("unparsedDate:", date)
 		fetch("/api/getDateInfo", {
 			method: "POST",
 			body: JSON.stringify({
 				language: language,
-				date: date.split("T")[0],
+				date: date.toISOString().split("T")[0],
 			}),
 			headers: {
 				"Content-Type": "application/json",
@@ -97,6 +92,29 @@ function Admin() {
 				getReservation(selectedDate, currentLanguage);
 			});
 	};
+
+	const deleteReservation = (person, date) => {
+		console.log("deleting reservation: ", person, date);
+		fetch("/api/deleteRes", {
+			method: "POST",
+			body: JSON.stringify({
+				language: currentLanguage,
+				date: date,
+				person: person,
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((promiseResponse) => {
+				return promiseResponse.json();
+			})
+			.then((parsedResponse) => {
+				console.log("parsedResponse resy: ", parsedResponse);
+				getReservation(selectedDate, currentLanguage);
+			});
+	}
+
 	const [currency, setCurrency] = useState("EUR");
 
 	const handleChange = (event) => {
@@ -133,8 +151,9 @@ function Admin() {
 				<div className={styles.Cal}>
 					<Calender
 						onChange={changeFunction}
-						value={selectedDate}
 						availability={avail}
+						value = {new Date(selectedDate)}
+						page = {"admin"}
 					/>
 				</div>
 			</div>
@@ -150,6 +169,7 @@ function Admin() {
 									<th>Date</th>
 									<th>Waitlist</th>
 									<th>Change</th>
+									<th>Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -186,6 +206,16 @@ function Admin() {
 													<span>here</span>
 												)}
 											</button>
+										</td>
+										<td>
+											<button className = {styles.changeButton}
+												onClick={() => {
+													deleteReservation(
+														res.email,
+														res.date
+													);
+												}}
+											>delete</button>
 										</td>
 									</tr>
 								))}

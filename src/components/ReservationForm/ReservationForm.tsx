@@ -163,8 +163,8 @@ function ReservationForm({
                     validation={{
                         required: "Please enter your email",
                         pattern: {
-                            value: /@middlebury.edu$/,
-                            message: "Please enter a Middlebury email address"
+                          //  value: /@middlebury.edu$/,
+							// message: "Please enter a Middlebury email address"
                         },
                     }}
                 />
@@ -176,8 +176,8 @@ function ReservationForm({
                     validation={{
                         required: "Please enter your Middlebury ID.",
                         pattern: {
-                            value: /^(00)?[0-9]{6}$/,
-                            message: "Please enter a valid Middlebury ID."
+                     //       value: /^(00)?[0-9]{6}$/,
+                         //   message: "Please enter a valid Middlebury ID."
                         },
                     }}
                 />
