@@ -101,7 +101,7 @@ export async function getLanguages(): Promise<Language[]> {
 /**
  * function to delete a persons reservation
  *
- *
+
  */
 export async function deleteReservation(
     person: string,
