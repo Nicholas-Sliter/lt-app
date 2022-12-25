@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Calender from "./Calendar";
 // import TextInput from "../components/Widgets/TextInput";
 import styles from "./Admin.module.scss";
 import { MenuItem, TextField } from "@mui/material";
 //import {getLanguages } from "../lib/backend/database-utils.ts"
 //import Language from "../types/Language";
-import moment from "moment"
-
 const languages = [
 	{ value: "English", label: "English" },
 	{ value: "Spanish", label: "Spanish" },
@@ -17,9 +15,8 @@ const languages = [
 function Admin() {
 	const [reservations, setReservations] = useState([]);
 	const [selectedDate, setDate] = useState(
-
-		new Date().toISOString().split("T")[0]
-			);
+		new Date().toISOString().split("T")[0],
+	);
 	const [currentLanguage, setCurrentLanguage] = useState("");
 	const { register, handleSubmit, watch, control } = useForm({});
 	const [avail, setAvail] = useState({});
@@ -36,29 +33,30 @@ function Admin() {
 			"change function, origional val:",
 			val,
 			"new date:",
-			new Date(val.toDateString()).toISOString().split("T")[0]
+			new Date(val.toDateString()).toISOString().split("T")[0],
 		);
-		let temp = val
-		setDate(temp.toISOString())
+		let temp = new Date(val.toDateString()).toISOString().split("T")[0]
+		setDate(temp);
 		getReservation(temp, currentLanguage);
 		console.log("value in current language", currentLanguage);
 	}
 
 	//function to get the current reservations
-	const getReservation =  (date:any, language:string) => {
-		setDate(date)
-		console.log("unparsedDate:", date)
-		//possibility of no date selected/OR current date is invalid:	
+	const getReservation = (date: string, language: string) => {
+		//setDate(date)
+		//setDate(date.toISOString().split("T")[0]);
+		console.log("unparsedDate:", date);
+		//possibility of no date selected/OR current date is invalid:
 		//if NOT a weeked, make api call
-		let m = moment(date, 'YYYY-MM-DD')
-		let tempM = new Date(m.format())
-		console.log("tempDate:",tempM, tempM.getDay())
-		if (tempM.getDay() !== 0 && tempM.getDay() !== 6) {
+
+		let dateF = new Date(date + "T00:00");
+		//console.log("tempDate:", dateF, dateF.getDay());
+		if (dateF.getDay() !== 0 && dateF.getDay() !== 6) {
 			fetch("/api/getDateInfo", {
 				method: "POST",
 				body: JSON.stringify({
 					language: language,
-					date: date.toISOString().split("T")[0],
+					date: date,
 				}),
 				headers: {
 					"Content-Type": "application/json",
@@ -72,9 +70,8 @@ function Admin() {
 					console.log(parsedReaponse.data);
 					setReservations(parsedReaponse.data);
 				});
-
 		} else {
-			console.log("weekend")
+			console.log("weekend");
 		}
 	};
 
@@ -120,7 +117,7 @@ function Admin() {
 				console.log("parsedResponse resy: ", parsedResponse);
 				getReservation(selectedDate, currentLanguage);
 			});
-	}
+	};
 
 	const [currency, setCurrency] = useState("EUR");
 
@@ -130,7 +127,7 @@ function Admin() {
 			"changed, calling getReservation with date:",
 			selectedDate,
 			"language:",
-			event.target.value
+			event.target.value,
 		);
 
 		getReservation(selectedDate, event.target.value);
@@ -159,81 +156,83 @@ function Admin() {
 					<Calender
 						onChange={changeFunction}
 						availability={avail}
-						value = {new Date(selectedDate)}
-						page = {"admin"}
+						value={new Date(selectedDate + "T00:00")}
+						page={"admin"}
 					/>
 				</div>
 			</div>
 			<div>
-				{reservations.length > 0 ? (
-					<div className={styles.reservations}>
-						<table>
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Language</th>
-									<th>Date</th>
-									<th>Waitlist</th>
-									<th>Change</th>
-									<th>Delete</th>
-								</tr>
-							</thead>
-							<tbody>
-								{reservations.map((res) => (
-									<tr
-										key={res.id}
-										className={
-											res.attended_at != null
-												? styles.attended
-												: styles.notAttended
-										}
-									>
-										<td>
-											{res.first_name} {res.last_name}
-										</td>
-										<td>{res.email}</td>
-										<td>{res.language}</td>
-										<td>{res.date}</td>
-										<td>{res.on_waitlist}</td>
-										<td>
-											<button className = {styles.changeButton}
-												onClick={() => {
-													changeStatus(
-														res.email,
-														res.date
-													);
-												}}
-											>
-												{res.on_waitlist == 1 ? (
-													<span>off waitlist </span>
-												) : res.attended_at != null ? (
-													<span>attended</span>
-												) : (
-													<span>here</span>
-												)}
-											</button>
-										</td>
-										<td>
-											<button className = {styles.changeButton}
-												onClick={() => {
-													deleteReservation(
-														res.email,
-														res.date
-													);
-												}}
-											>delete</button>
-										</td>
+				{reservations.length > 0
+					? (
+						<div className={styles.reservations}>
+							<table>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Email</th>
+										<th>Language</th>
+										<th>Date</th>
+										<th>Waitlist</th>
+										<th>Change</th>
+										<th>Delete</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				) : (
-					<div className={styles.noResy}>
-						No reservations for selected day/language
-					</div>
-				)}
+								</thead>
+								<tbody>
+									{reservations.map((res) => (
+										<tr
+											key={res.id}
+											className={res.attended_at != null
+												? styles.attended
+												: styles.notAttended}
+										>
+											<td>
+												{res.first_name} {res.last_name}
+											</td>
+											<td>{res.email}</td>
+											<td>{res.language}</td>
+											<td>{res.date}</td>
+											<td>{res.on_waitlist}</td>
+											<td>
+												<button
+													className={styles.changeButton}
+													onClick={() => {
+														changeStatus(
+															res.email,
+															res.date,
+														);
+													}}
+												>
+													{res.on_waitlist == 1
+														? <span>off waitlist</span>
+														: res.attended_at != null
+															? <span>attended</span>
+															: <span>here</span>}
+												</button>
+											</td>
+											<td>
+												<button
+													className={styles.changeButton}
+													onClick={() => {
+														deleteReservation(
+															res.email,
+															res.date,
+														);
+													}}
+												>
+													delete
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					)
+					: (
+						<div className={styles.noResy}>
+							No reservations for selected day/language
+						</div>
+					)}
 			</div>
 		</div>
 	);
