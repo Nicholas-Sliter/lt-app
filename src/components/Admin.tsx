@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Calender from "./Calendar";
-import Calendar from "react-calendar";
 // import TextInput from "../components/Widgets/TextInput";
-import FormBox from "../components/FormBox";
-import TextInput from "./Widgets/TextInput";
 import styles from "./Admin.module.scss";
 import { MenuItem, TextField } from "@mui/material";
+//import {getLanguages } from "../lib/backend/database-utils.ts"
+//import Language from "../types/Language";
+import moment from "moment"
 
 const languages = [
 	{ value: "English", label: "English" },
@@ -30,6 +30,7 @@ function Admin() {
 		setCurrentLanguage(language);
 	}
 
+	//handle change of the date
 	function changeFunction(val) {
 		console.log(
 			"change function, origional val:",
@@ -37,39 +38,45 @@ function Admin() {
 			"new date:",
 			new Date(val.toDateString()).toISOString().split("T")[0]
 		);
-		// var temp = val.toISOString().split("T")[0];
-		// var temp = new Date(new Date(val).toISOString().split("T")[0]);
-	//	var temp = new Date(val.toDateString()).toISOString().split("T")[0];
-	//	console.log("new temp:", temp);
-	//	setDate(temp);
-		var temp = val
+		let temp = val
 		setDate(temp.toISOString())
 		getReservation(temp, currentLanguage);
 		console.log("value in current language", currentLanguage);
 	}
 
-	const getReservation = async (date, language) => {
+	//function to get the current reservations
+	const getReservation =  (date:any, language:string) => {
 		setDate(date)
 		console.log("unparsedDate:", date)
-		fetch("/api/getDateInfo", {
-			method: "POST",
-			body: JSON.stringify({
-				language: language,
-				date: date.toISOString().split("T")[0],
-			}),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((promiseResponse) => {
-				// console.log("resy:", promiseResponse.json());
-				return promiseResponse.json();
+		//possibility of no date selected/OR current date is invalid:	
+		//if NOT a weeked, make api call
+		let m = moment(date, 'YYYY-MM-DD')
+		let tempM = new Date(m.format())
+		console.log("tempDate:",tempM, tempM.getDay())
+		if (tempM.getDay() !== 0 && tempM.getDay() !== 6) {
+			fetch("/api/getDateInfo", {
+				method: "POST",
+				body: JSON.stringify({
+					language: language,
+					date: date.toISOString().split("T")[0],
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			})
-			.then((parsedReaponse) => {
-				console.log(parsedReaponse.data);
-				setReservations(parsedReaponse.data);
-			});
-	}; // }}}
+				.then((promiseResponse) => {
+					// console.log("resy:", promiseResponse.json());
+					return promiseResponse.json();
+				})
+				.then((parsedReaponse) => {
+					console.log(parsedReaponse.data);
+					setReservations(parsedReaponse.data);
+				});
+
+		} else {
+			console.log("weekend")
+		}
+	};
 
 	const changeStatus = (person, date) => {
 		console.log("changing status of: ", person, date);
