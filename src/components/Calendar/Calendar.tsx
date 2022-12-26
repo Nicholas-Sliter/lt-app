@@ -28,15 +28,6 @@ function Calender({ onChange, value, disabled, availability, page }: CalendarPro
 	const maxDate = addDays(today, 16);
 
 	//this is because we need to change from Year-Month-Day to Month-Day-Year (https://stackoverflow.com/questions/7556591/is-the-javascript-date-object-always-one-day-off)
-	// const newDate = new Date(
-	// 	value.toString().slice(5, 7) +
-	// 	"-" +
-	// 	value.toString().slice(8, 10) +
-	// 	"-" +
-	// 	value.toString().slice(0, 4)
-	// );
-
-	// console.log("in calender object passed with", value, "new date:", newDate);
 
 	const getDateClass = ({
 		activeStartDate,

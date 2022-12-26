@@ -4,7 +4,7 @@ import Calender from "../../components/Calendar/";
 // import TextInput from "../components/Widgets/TextInput";
 import styles from "./Admin.module.scss";
 import { MenuItem, TextField } from "@mui/material";
-//import {getLanguages } from "../lib/backend/database-utils.ts"
+import {getNextWeekday} from "../../lib/frontend/utils.ts";
 //import Language from "../types/Language";
 const languages = [
 	{ value: "English", label: "English" },
@@ -12,11 +12,6 @@ const languages = [
 	{ value: "French", label: "French" },
 ];
 
-/*
-
-TODO: Admin should be defined here instead of in a component
-
-*/
 
 function Admin() {
 	const [reservations, setReservations] = useState([]);
@@ -26,6 +21,7 @@ function Admin() {
 	const [currentLanguage, setCurrentLanguage] = useState("");
 	const { register, handleSubmit, watch, control } = useForm({});
 	const [avail, setAvail] = useState({});
+	const [languages, setLanguages] = useState([])
 
 	const language = watch("language");
 
@@ -33,8 +29,25 @@ function Admin() {
 		setCurrentLanguage(language);
 	}
 
+	useEffect(() => {
+		fetch("/api/languages", {
+			method: "POST",
+			body: JSON.stringify({
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((promiseResponse) => {
+				return promiseResponse.json();
+			})
+			.then((parsed) => {
+				console.log("languages",parsed );
+				setLanguages(parsed)
+			});
+	},[])
 	//handle change of the date
-	function changeFunction(val) {
+	function changeFunction(val: Date) {
 		console.log(
 			"change function, origional val:",
 			val,
@@ -49,39 +62,36 @@ function Admin() {
 
 	//function to get the current reservations
 	const getReservation = (date: string, language: string) => {
-		//setDate(date)
-		//setDate(date.toISOString().split("T")[0]);
 		console.log("unparsedDate:", date);
 		//possibility of no date selected/OR current date is invalid:
 		//if NOT a weeked, make api call
 
 		let dateF = new Date(date + "T00:00");
-		//console.log("tempDate:", dateF, dateF.getDay());
-		if (dateF.getDay() !== 0 && dateF.getDay() !== 6) {
-			fetch("/api/getDateInfo", {
-				method: "POST",
-				body: JSON.stringify({
-					language: language,
-					date: date,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
+		dateF = getNextWeekday(dateF)
+		fetch("/api/getDateInfo", {
+			method: "POST",
+			body: JSON.stringify({
+				language: language,
+				date: date,
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((promiseResponse) => {
+				// console.log("resy:", promiseResponse.json());
+				return promiseResponse.json();
 			})
-				.then((promiseResponse) => {
-					// console.log("resy:", promiseResponse.json());
-					return promiseResponse.json();
-				})
-				.then((parsedReaponse) => {
-					console.log(parsedReaponse.data);
-					setReservations(parsedReaponse.data);
-				});
-		} else {
-			console.log("weekend");
-		}
+			.then((parsedReaponse) => {
+				console.log(parsedReaponse.data);
+				setReservations(parsedReaponse.data);
+			});
+	//	} else {
+	//		console.log("weekend");
+	//	}
 	};
 
-	const changeStatus = (person, date) => {
+	const changeStatus = (person: string, date: string) => {
 		console.log("changing status of: ", person, date);
 		fetch("/api/changeStatus", {
 			method: "POST",
@@ -103,7 +113,7 @@ function Admin() {
 			});
 	};
 
-	const deleteReservation = (person, date) => {
+	const deleteReservation = (person: string, date: string) => {
 		console.log("deleting reservation: ", person, date);
 		fetch("/api/deleteRes", {
 			method: "POST",
@@ -151,8 +161,8 @@ function Admin() {
 					helperText="Please select language"
 				>
 					{languages.map((option) => (
-						<MenuItem key={option.value} value={option.value}>
-							{option.label}
+						<MenuItem key={option.name} value={option.name}>
+							{option.name}
 						</MenuItem>
 					))}
 				</TextField>
