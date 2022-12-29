@@ -1,0 +1,87 @@
+.LangHolder {
+	display: flex;
+	justify-content: center;
+	padding-top: 50px;
+	width: 100%;
+}
+.CalHolder {
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+}
+.Cal {
+	width: 400px;
+}
+
+.reservations {
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+}
+
+.reservations table {
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.reservations table thead tr {
+	background-color: #009879;
+	color: #ffffff;
+	text-align: left;
+}
+
+.reservations table th,
+.reservations table td {
+	padding: 12px 15px;
+	text-align: center;
+}
+.noResy {
+	margin: 20px;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+// .reservations table tbody tr{
+//     border: 1px solid;
+// }
+
+.attended {
+	background-color: #a3a2a2;
+	color: #5c5c5c;
+}
+.changeButton {
+  background-color: #009879;
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: 30px;
+  line-height: 10px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.changeButton:hover,
+.changeButton:focus {
+  background-color: #009879;
+}
+
+

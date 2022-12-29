@@ -13,9 +13,12 @@ interface TextInputProps {
         max?: number;
         minLength?: number;
         maxLength?: number;
-        pattern?: string;
+        pattern?: {
+            value: RegExp;
+            message: string;
+        };
         validate?: Function;
-    },
+    };
     component?: Component;
     disabled?: boolean;
     error?: boolean;
@@ -28,45 +31,55 @@ interface TextInputProps {
     }[];
     autoFocus?: boolean;
     autoFocusIfEmpty?: boolean;
-
 }
 
-
-
-function TextInput({ name, label, title, register, validation = {}, disabled = false, select = false, options = [], autoFocus = false, autoFocusIfEmpty }: TextInputProps) {
-    const formFields = register(name, validation)
-
-    const Input = <TextField
-        name={name}
-        label={label}
-        title={title ?? ""}
-        defaultValue={formFields?.defaultValue ?? null}
-        variant="outlined"
-        disabled={disabled}
-        size="small"
-        select={select}
-        autoFocus={autoFocus || (autoFocusIfEmpty && !formFields?.ref.current?.value)}
-        required={Boolean(validation?.required ?? false)}
-        {...formFields}
-    >
-        {select && options.map((option, index) =>
-            <MenuItem key={option.value} value={option.value}>
-                {option.label}
-            </MenuItem>
-        )}
-    </TextField>;
+function TextInput({
+    name,
+    label,
+    title,
+    register,
+    validation = {},
+    disabled = false,
+    select = false,
+    options = [],
+    autoFocus = false,
+    autoFocusIfEmpty,
+}: TextInputProps) {
+    const formFields = register(name, validation);
 
     const classes = [styles.container];
+
     if (disabled) {
         classes.push(styles.disabled);
     }
 
     return (
         <div className={classes.join(" ")}>
-            {Input}
+            <TextField
+                name={name}
+                label={label}
+                title={title ?? ""}
+                defaultValue={formFields.defaultValue ?? ""}
+                variant="outlined"
+                disabled={disabled}
+                size="small"
+                select={select}
+                autoFocus={
+                    autoFocus ||
+                    (autoFocusIfEmpty && !formFields?.ref.current?.value)
+                }
+                required={Boolean(validation?.required ?? false)}
+                {...formFields}
+            >
+                {select &&
+                    options.map((option, index) => (
+                        <MenuItem key={`${option.value}_${index}`} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
+            </TextField>
         </div>
     );
-
 }
 
 export default TextInput;

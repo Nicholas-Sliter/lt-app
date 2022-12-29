@@ -6,7 +6,7 @@ type Data = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-
+	console.log("inside langauges api");
   try {
     const data = await getLanguages();
     console.log(data);

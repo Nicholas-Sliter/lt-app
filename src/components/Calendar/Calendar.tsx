@@ -4,136 +4,130 @@ import "react-calendar/dist/Calendar.css";
 import styles from "./Calendar.module.scss";
 import { addDays, getNextWeekday } from "../../lib/frontend/utils";
 import AvailabilityIndicator from "./AvailabilityIndicator";
-
+import { Availability } from "../../types/Availability";
+import { stringFormattedDate } from "../../lib/common/utils";
 
 interface CalendarProps {
-  onChange: (date: Date) => void;
-  value: Date;
-  disabled?: boolean;
-  availability?: {
-    [date: string]: "available" | "unavailable" | "waitlist";
-  }
+	onChange: (date: Date) => void;
+	value: Date;
+	disabled?: boolean;
+	availability: Availability;
+	page: string;
 }
 
-function Calender({ onChange, value, disabled, availability }: CalendarProps) {
 
-  const today = new Date();
-  const minDate = today
-  const maxDate = addDays(today, 30);
-
-  console.log("value:", value)
-
-  const disableDateHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
-    /** 
-     * Disable weekends
-     * Disable all dates if disabled is true
-     */
-    if (date.getDay() === 0 || date.getDay() === 6) {
-      return true;
-    }
-    return disabled ?? false;
-  }
+function getDateAvailability(date: Date, availability: Availability) {
+	return availability[stringFormattedDate(date)];
+}
 
 
-  const tileDisabled = (date: Date) => {
-    if (date.getDay() === 0 || date.getDay() === 6) {
-      return true;
-    }
-    return disabled ?? false;
-  }
 
-  const tileStatusToClass = (status: string[]) => {
-    const classes: string[] = [];
-    if (status.includes("disabled")) {
-      classes.push(styles.disabled);
-    }
-    if (status.includes("past")) {
-      classes.push(styles.past);
-    }
-    if (status.includes("past")) {
-      classes.push(styles.past);
-    }
-    if (status.includes("available")) {
-      classes.push(styles.available);
-    }
-    if (status.includes("unavailable")) {
-      classes.push(styles.unavailable);
-    }
-    if (status.includes("waitlist")) {
-      classes.push(styles.waitlist);
-    }
-    return classes.join(" ");
-  }
+function Calender({ onChange, value, disabled, availability, page }: CalendarProps) {
+	const today = new Date();
+	const minDate = getNextWeekday(today);
+	const maxDate = addDays(today, 16);
 
-  const tileStatusHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
-    /** 
-     * Handle both disabled and availability
-     */
+	//this is because we need to change from Year-Month-Day to Month-Day-Year (https://stackoverflow.com/questions/7556591/is-the-javascript-date-object-always-one-day-off)
 
-    const statusArray: string[] = [];
+	const getDateClass = ({
+		activeStartDate,
+		date,
+		view,
+	}: CalendarTileProperties) => {
+		/**
+		 * Disable weekends
+		 * Disable all dates if disabled is true
+		 */
 
-    if (tileDisabled(date)) {
-      //takes precedence over all other statuses
-      return ["disabled"];
-    }
+		if (date.getDay() === 0 || date.getDay() === 6) {
+			return "unavailable";
+			//return true;
+		}
 
-    if (date < today) {
-      return ["past"];
-    }
+		return getDateAvailability(date, availability);
+	};
+	// how we know wether to disable date or not
+	const tileDisabled = (date: Date) => {
+		if (page == "admin") {
+			return false	
+		}
+		if (disabled) {
+			return true;
+		}
 
-    if (date.getTime() === value.getTime()) {
-      statusArray.push("selected");
-    }
+		if (date.getDay() === 0 || date.getDay() === 6) {
+			return true;
+		}
+		if (
+			["available", "waitlist"].includes(getDateAvailability(date, availability))
+		) {
+			return false;
+		}
+		return true;
+	};
 
-    if (availability) {
-      statusArray.push(availability?.[date.toISOString()] ?? "unavailable");
-    }
 
-    return statusArray;
-  }
+	// sets classes based on availability
+	const tileClassNameHandler = ({
+		activeStartDate,
+		date,
+		view,
+	}: CalendarTileProperties) => {
 
-  const tileClassNameHandler = ({ activeStartDate, date, view }: CalendarTileProperties) => {
-    if (date.getTime() === value.getTime()) {
-      return styles.selected;
-    }
-    const status = availability?.[date.toISOString()] ?? "unavailable";
-    const className = styles[status];
-    return className;
-  }
+		if (tileDisabled(date)) {
+			return styles.disabled;
+		}
 
-  const dateChangeHandler = (date: Date) => {
-    //prevent changing dates to disabled dates
-    if (disableDateHandler({ activeStartDate: date, date, view: "month" })) {
-      return;
-    }
-    onChange(date);
-  }
+		if (date.getTime() === value.getTime()) {
+			return styles.selected;
+		}
+		let status = "unavailable";
+		status = getDateAvailability(date, availability);
 
-  return (
-    <div>
-      <Calendar
-        onChange={dateChangeHandler}
-        value={value}
-        minDate={today}
-        maxDate={maxDate}
-        maxDetail="month"
-        minDetail="month"
-        prev2Label={null}
-        next2Label={null}
-        tileDisabled={disableDateHandler}
-        tileClassName={tileClassNameHandler}
-        tileContent={({ date, view }) => {
-          const hidden = disableDateHandler({ activeStartDate: date, date, view });
-          if (hidden) {
-            return null;
-          }
-          return (<AvailabilityIndicator availability="unavailable" />)
-        }
-        }
+		const className = styles[status];
+		return className;
+	};
 
-      />
-    </div>
-  );
+	// handles if we can click on a date or not
+	const dateChangeHandler = (date: Date) => {
+		console.log("shit chaged")
+
+		onChange(date);
+		//prevent changing dates to disabled dates
+		if (tileDisabled(date)) {
+			return;
+		}
+	};
+
+	return (
+		<div>
+			<Calendar
+				onChange={dateChangeHandler}
+				value={value}
+				minDate={today}
+				maxDate={maxDate}
+				maxDetail="month"
+				minDetail="month"
+				prev2Label={null}
+				next2Label={null}
+				//tileDisabled={disableDateHandler}
+				tileClassName={tileClassNameHandler}
+				tileContent={({ date, view }) => {
+						
+					if (tileDisabled(date)) {
+						return null;
+					}
+
+					const status = getDateClass({
+						activeStartDate: date,
+						date,
+						view,
+					});
+					return <AvailabilityIndicator availability={status} />;
+				}}
+			/>
+		</div>
+	);
 }
 
 export default Calender;
