@@ -258,7 +258,9 @@ export async function createReservation(reservation: Reservation) {
         return null;
     }
 
-    return res[0].id;
+//	console.log("inside createReservation. res is: ", await res); 
+   // return res[0].id;
+	return res;
 
 
 

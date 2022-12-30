@@ -122,7 +122,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
         ///stuff here
 
-
+		
 
         const reservationObj: Reservation = {
             first_name,
@@ -149,6 +149,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
         const reservation = await createReservation(reservationObj);
 
+		console.log("create reservation API returns with reservation object:, ", await reservation);
         if (!reservation) {
             res.status(400).end({ message: "Invalid reservation" });
             return;

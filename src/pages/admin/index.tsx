@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Calender from "../../components/Calendar/";
-// import TextInput from "../components/Widgets/TextInput";
 import styles from "./Admin.module.scss";
 import { MenuItem, TextField } from "@mui/material";
 import {getNextWeekday} from "../../lib/frontend/utils.ts";
-//import Language from "../types/Language";
-const languages = [
-	{ value: "English", label: "English" },
-	{ value: "Spanish", label: "Spanish" },
-	{ value: "French", label: "French" },
-];
+import Reservation from "../../types/Reservation/index.ts";
+import Language from "../../types/Language"
 
 
 function Admin() {
@@ -86,9 +81,6 @@ function Admin() {
 				console.log(parsedReaponse.data);
 				setReservations(parsedReaponse.data);
 			});
-	//	} else {
-	//		console.log("weekend");
-	//	}
 	};
 
 	const changeStatus = (person: string, date: string) => {
@@ -135,9 +127,8 @@ function Admin() {
 			});
 	};
 
-	const [currency, setCurrency] = useState("EUR");
 
-	const handleChange = (event) => {
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setCurrentLanguage(event.target.value);
 		console.log(
 			"changed, calling getReservation with date:",
@@ -160,7 +151,7 @@ function Admin() {
 					onChange={handleChange}
 					helperText="Please select language"
 				>
-					{languages.map((option) => (
+					{languages.map((option: Language) => (
 						<MenuItem key={option.name} value={option.name}>
 							{option.name}
 						</MenuItem>
@@ -194,7 +185,7 @@ function Admin() {
 									</tr>
 								</thead>
 								<tbody>
-									{reservations.map((res) => (
+									{reservations.map((res: Reservation) => (
 										<tr
 											key={res.id}
 											className={res.attended_at != null

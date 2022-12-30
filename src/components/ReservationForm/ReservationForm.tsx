@@ -75,14 +75,10 @@ function ReservationForm({
     const lastName: string = watch("last_name");
     const email: string = watch("email");
     const middlebury_id: string = watch("middlebury_id");
-
-
     const todayISO = stringFormattedDate(new Date());
     const WINDOW_LENGTH = 16;
-    const availability = useAvailability(todayISO, language, WINDOW_LENGTH);
-
+    let availability = useAvailability(todayISO, language, WINDOW_LENGTH);
     const dateAvailability = availability[date] ?? "unavailable";
-
     const disableCalendar = !language || !course;
     const disableSubmit = !firstName || !lastName || !email || !middlebury_id || !language || !course; // || !date
 
@@ -204,6 +200,8 @@ function ReservationForm({
                                     error,
                                     message: message
                                 });
+								//re get availability after reservation is made
+    							// availability = useAvailability(todayISO, language, WINDOW_LENGTH);
                                 setShowSnackbar(true);
 
                             }), 1000)}
